@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:rotationX="0"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="410dp"
+        android:layout_height="538dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic[1]" />
+
+    <Button
+        android:id="@+id/download_button"
+        android:layout_width="379dp"
+        android:layout_height="65dp"
+        android:text="立刻生成图片"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="548dp" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="379dp"
+        android:layout_height="65dp"
+        android:text="保存图片到本地"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="631dp" />
+</android.support.constraint.ConstraintLayout>-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/download_button"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="389dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="一键生成并保存（手机壁纸）"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="#EDEDED" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="377dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/download_button"
+        android:layout_marginTop="3dp"
+        android:enabled="false"
+        android:text="Save to Gallery"
+        android:visibility="invisible"
+        tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="395dp"
+        android:layout_height="591dp"
+        android:layout_below="@id/save_button"
+
+        android:layout_marginTop="2dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        tools:src="@tools:sample/backgrounds/scenic"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+</RelativeLayout>
+    <!--android:layout_below="@id/save_button" 将ImageView放置在save_button元素的下方。-->
