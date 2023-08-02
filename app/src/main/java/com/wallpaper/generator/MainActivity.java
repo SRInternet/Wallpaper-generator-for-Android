@@ -73,7 +73,11 @@ import android.content.DialogInterface;
 import androidx.annotation.NonNull;
 
 import android.content.Intent;
-import android.net.Uri;
+/*import android.net.Uri;
+import android.view.KeyEvent;*/
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     private Button downloadButton;
     private Button saveButton;
     private ImageView imageView;
+    private long backButtonPressedTime = 0;
+    private boolean isAppInBackground = true; // 标记应用是否在后台
+
+    private boolean isAppInForeground = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
 
         // 弹出信息窗口
         showDialog();
+
+        MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(myBroadcastReceiver, intentFilter);
+
+        //showToastIfAppInBackground();
 
 
         downloadButton.setOnClickListener(new View.OnClickListener() {
@@ -457,4 +471,67 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(MainActivity.this, "图片成功地保存在了相册中.", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onBackPressed() {
+        // 按下返回键时的时间戳
+        long currentTime = System.currentTimeMillis();
+
+        // 判断时间间隔是否小于2秒
+        if (currentTime - backButtonPressedTime < 2000) {
+            super.onBackPressed(); // 执行默认的返回键操作，退出应用程序
+            finish();
+            System.exit(0);
+        } else {
+            backButtonPressedTime = currentTime; // 更新按下返回键的时间戳
+            Toast.makeText(this, "再按一次返回键退出", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isAppInBackground = false; // 当Activity启动时，应用处于前台
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isAppInForeground = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isAppInForeground = false;
+        showToastIfAppInBackground();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // 检查应用是否进入后台
+        if (!isChangingConfigurations()) {
+            isAppInBackground = true; // 当Activity停止时，应用进入后台
+        }
+    }
+
+    private void showToastIfAppInBackground() {
+        if (!isAppInForeground) {
+            Toast.makeText(this, "壁纸生成器 将在后台保持运行，但生成将被停止。", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "return to background", Toast.LENGTH_SHORT).show();
+        }
+    }
+/*    public boolean isAppInBackground() {
+        return isAppInBackground;
+    }*/
+
+
 }
