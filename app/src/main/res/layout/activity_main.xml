@@ -43,19 +43,19 @@
     <Button
         android:id="@+id/download_button"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="389dp"
+        android:layout_width="784dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:text="一键生成并保存（手机壁纸）"
+        android:text="一键生成并保存"
         android:textColor="#000000"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:backgroundTint="#EDEDED" />
 
     <Button
         android:id="@+id/save_button"
-        android:layout_width="377dp"
-        android:layout_height="35dp"
+        android:layout_width="777dp"
+        android:layout_height="31dp"
         android:layout_below="@id/download_button"
         android:layout_marginTop="3dp"
         android:enabled="false"
@@ -65,8 +65,8 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="395dp"
-        android:layout_height="591dp"
+        android:layout_width="784dp"
+        android:layout_height="1174dp"
         android:layout_below="@id/save_button"
 
         android:layout_marginTop="2dp"

@@ -44,6 +44,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -78,6 +79,12 @@ import android.view.KeyEvent;*/
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.app.NotificationManager;
+import android.app.NotificationChannel;
+
+import androidx.core.app.NotificationCompat;
+import android.app.Notification;
+import android.media.RingtoneManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -90,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAppInBackground = true; // 标记应用是否在后台
 
     private boolean isAppInForeground = false;
+    private volatile Uri imageUri;
+    private volatile boolean stopUpdateProgress = false;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
         }
         builder.setTitle("欢迎 Welcome")
-                .setMessage("欢迎使用 壁纸生成器 for Andorid 1.0.0-alpha ！\n感谢您积极参与测试，欢迎及时反馈哦！\n反馈邮箱：srinternet@qq.com")
+                .setMessage("欢迎使用 壁纸生成器 for Andorid 1.0.0 ！\n感谢您积极参与测试，欢迎及时反馈哦！\n反馈邮箱：srinternet@qq.com")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -218,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 new SaveImageTask().execute(imageUrl);
                 saveButton.setEnabled(true);
             } else {
-                Toast.makeText(MainActivity.this, "Failed to get image.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "无法获取图片，请检查网络.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -236,8 +248,79 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(String... params) {
             //Toast.makeText(MainActivity.this, "正在保存...", Toast.LENGTH_SHORT).show();
             System.out.println("in this step");
+            stopUpdateProgress = false;
             String imageUrl = params[0];
             Bitmap bitmap = null;
+            // 检查当前设备的API级别
+            String channelId = "Progress";
+            String channelId_1 = "Saved";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // 创建通知通道
+
+                CharSequence channelName = "进度显示"; // 设置通道名称
+                int importance = NotificationManager.IMPORTANCE_LOW;
+                NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, importance);
+
+                // 设置其他通道属性
+                // ...
+
+                // 注册通知通道
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(notificationChannel);
+
+                CharSequence channelName_1 = "已保存通知"; // 设置通道名称
+                int importance_1 = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel notificationChannel_1 = new NotificationChannel(channelId_1, channelName_1, importance_1);
+
+                // 设置其他通道属性
+                // ...
+
+                // 注册通知通道
+                NotificationManager notificationManager_1 = getSystemService(NotificationManager.class);
+                notificationManager_1.createNotificationChannel(notificationChannel_1);
+            }
+
+// 创建通知
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, channelId)
+                    .setSmallIcon(R.mipmap.ic_notification)
+                    .setContentTitle("正在获取图片")
+                    .setProgress(100, 0, false) // 设置初始进度为0
+                    .setOngoing(true);
+
+// 发送通知
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.notify(1, builder.build());
+
+
+            // saveImageThread
+
+            // 在这里执行保存图片的操作
+
+            // 启动 updateProgressThread
+            Thread updateProgressThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // 模拟保存图片的耗时操作和进度更新
+                    int progress = 0;
+                    builder.setPriority(NotificationCompat.PRIORITY_LOW);
+                    while (progress < 100 && !stopUpdateProgress) {
+                        try {
+                            System.out.println("add");
+                            // 模拟每次保存图片的耗时操作
+                            Thread.sleep(100);
+                            progress += 1; // 假设每次循环增加10%的进度
+
+                            // 更新通知栏进度条
+                            builder.setProgress(100, progress, false);
+                            notificationManager.notify(1, builder.build());
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            updateProgressThread.start();
 
             try {
                 URL url = new URL(imageUrl);
@@ -254,7 +337,34 @@ public class MainActivity extends AppCompatActivity {
 
             if (bitmap != null) {
                 //Toast.makeText(MainActivity.this, "正在生成，请等待", Toast.LENGTH_LONG).show();
+
+
+                try {
+                    Thread.sleep(1000); // 休眠1秒 (1000毫秒)
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 saveBitmapToGallery(bitmap);
+                builder.setProgress(100, 100, false);
+                stopUpdateProgress = true;
+                try {
+                    updateProgressThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                notificationManager.cancel(1);
+
+
+                NotificationCompat.Builder builder_1 = new NotificationCompat.Builder(MainActivity.this, channelId_1)
+                        .setSmallIcon(R.mipmap.ic_notification)
+                        .setContentTitle("已保存")
+                        .setOngoing(false);
+                notificationManager.notify(2, builder_1.build());
+
+                // 停止 updateProgressThread
+
             }
 
             return null;
@@ -262,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Toast.makeText(MainActivity.this, "image saved.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "图片已保存。", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -273,17 +383,40 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
         } else {
-            // 执行操作
-            System.out.println("in the step");
-            /*ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis() + ".jpg");
+// 创建通知
+/*            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                    .setSmallIcon(R.mipmap.ic_notification)
+                    //.setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setContentTitle("正在保存图片")
+                    .setProgress(0, 0, true)
+                    .setOngoing(true);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder.setChannelId("channel_id");
+
+            }
+            *//*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            }*//*
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.notify(1, builder.build());
+
+// 执行操作
+            String fileName = System.currentTimeMillis() + ".jpg";
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
             values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
-            //
             ContentResolver resolver = getContentResolver();
             Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            System.out.println(values);
-            //
+
             if (imageUri != null) {
                 try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
@@ -291,38 +424,54 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }*/
-
-            // 创建保存图片的目录
-            File picturesDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            if (!picturesDirectory.exists()) {
-                picturesDirectory.mkdirs();
             }
 
-// 创建文件名
+// 更新通知
+            builder.setProgress(0, 0, false)
+                    .setContentTitle("保存完成")
+                    .setOngoing(false);
+            notificationManager.notify(1, builder.build());*/
+
+
+
+            // 在这里执行保存图片的操作
             String fileName = System.currentTimeMillis() + ".jpg";
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+            } else {
+                String pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+                String imagePath = pictureDirectory + "/" + fileName;
 
-// 创建保存图片的文件
-            File imageFile = new File(picturesDirectory, fileName);
-
-            try (FileOutputStream outputStream = new FileOutputStream(imageFile)) {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                outputStream.flush();
-
-                // 通知相册更新
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(imageFile);
-                mediaScanIntent.setData(contentUri);
-                sendBroadcast(mediaScanIntent);
-            } catch (IOException e) {
-                e.printStackTrace();
+                values.put(MediaStore.Images.Media.DATA, imagePath);
             }
-
-            try {
-                Thread.sleep(1000); // 休眠1秒 (1000毫秒)
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            ContentResolver resolver = getContentResolver();
+            synchronized (this) {
+                // 对imageUri进行写入操作
+                imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
             }
+            /*Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
+
+            if (imageUri != null) {
+                try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                    outputStream.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+// 通知相册更新
+/*            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(new File(imageUri.getPath()));
+            mediaScanIntent.setData(contentUri);
+            sendBroadcast(mediaScanIntent);*/
+            // 通知相册更新
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(imageUri);
+            sendBroadcast(mediaScanIntent);
+
 
             // 从相册中查询最新添加的图片
             String[] projection = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
