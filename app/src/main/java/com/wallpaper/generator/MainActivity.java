@@ -85,20 +85,36 @@ import android.app.NotificationChannel;
 import androidx.core.app.NotificationCompat;
 import android.app.Notification;
 import android.media.RingtoneManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
+import android.content.SharedPreferences;
+import android.app.WallpaperManager;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Canvas;
+import androidx.core.content.FileProvider;
+import android.view.LayoutInflater;
+import android.os.Handler;
+import android.os.Looper;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
     private static final int PERMISSION_REQUEST_CODE = 1001;
     private Button downloadButton;
-    private Button saveButton;
     private ImageView imageView;
     private long backButtonPressedTime = 0;
     private boolean isAppInBackground = true; // 标记应用是否在后台
+    private boolean completed = false;
 
     private boolean isAppInForeground = false;
     private volatile Uri imageUri;
     private volatile boolean stopUpdateProgress = false;
+    private String url = "https://api.iw233.cn/api.php?sort=mp&type=json&num=1";
 
 
 
@@ -111,15 +127,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         downloadButton = findViewById(R.id.download_button);
-        saveButton = findViewById(R.id.save_button);
         imageView = findViewById(R.id.image_view);
 
-        saveButton.setEnabled(false);
 
         /*setContentView(R.layout.activity_main);*/
 
         // 弹出信息窗口
-        showDialog();
+        SharedPreferences sharedPreferences = getSharedPreferences("Wallpaper_Generator", MODE_PRIVATE);
+        boolean isFirstTime = sharedPreferences.getBoolean("isFirstTime", true);
+        if (isFirstTime) {
+            // 第一次打开程序的逻辑
+            showDialog();
+
+            // 将isFirstTime设置为false，表示程序已经不是首次打开
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isFirstTime", false);
+            editor.apply();
+        }
 
         MyBroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
@@ -127,27 +151,87 @@ public class MainActivity extends AppCompatActivity {
 
         //showToastIfAppInBackground();
 
+        // 在活动中获取侧边栏引用
+        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.navigationView);
+
+        navigationView.setClickable(true); // 设置抽屉视图可点击
+
 
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://api.iw233.cn/api.php?sort=mp&type=json&num=1";
+
                 String json = "{\"type\": \"json\",\"num\": 1}";
 
                 new DownloadImageTask().execute(url);/* , json*/
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        Button toggleButton = findViewById(R.id.toggleButton);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    //drawerLayout.closeDrawer(GravityCompat.START);
                 } else {
-                    saveImageToGallery();
+                    drawerLayout.openDrawer(GravityCompat.START);
+                    navigationView.bringToFront();
                 }
             }
         });
+
+        Button Phone_button = findViewById(R.id.Phone_button);
+        Phone_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                url = "https://api.iw233.cn/api.php?sort=mp&type=json&num=1";
+
+                ConstraintLayout constraintLayout = findViewById(R.id.ConstraintLayoutA);
+                constraintLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.background));
+
+                Toast.makeText(MainActivity.this, "将会生成 手机壁纸.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button AI_button = findViewById(R.id.AI_button);
+        AI_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                url = "https://api.iw233.cn/api.php?sort=top&type=json&num=1";
+
+                ConstraintLayout constraintLayout = findViewById(R.id.ConstraintLayoutA);
+                constraintLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.ai_background));
+
+                Toast.makeText(MainActivity.this, "将会生成 AI推荐的壁纸.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button About = findViewById(R.id.About);
+        About.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAbout();
+            }
+        });
+
+        Button Contact = findViewById(R.id.Contact);
+        Contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContact();
+            }
+        });
+
+        Button Sponsor = findViewById(R.id.Sponsor);
+        Sponsor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String htmlUrl = "https://afdian.net/a/srinternet";  // 要打开的HTML的URL
+                openHTMLInBrowser(htmlUrl);
+            }
+        });
+
     }
 
 
@@ -157,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
         }
         builder.setTitle("欢迎 Welcome")
-                .setMessage("欢迎使用 壁纸生成器 for Andorid 1.0.0 ！\n感谢您积极参与测试，欢迎及时反馈哦！\n反馈邮箱：srinternet@qq.com")
+                .setMessage("欢迎使用 壁纸生成器手机版 2.0.0 ！\n本次更新主要新增了侧边栏功能项，现已可以生成不同类型的壁纸，快去试试吧！\n若有任何问题，请及时反馈，邮箱：srinternet@qq.com\n欢迎加入QQ群 367798007 与我们交流！\n\n 此消息只显示一次，请认真阅读。")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -168,6 +252,191 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void showAbout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        }
+        builder.setTitle("关于本程序")
+                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：2.0.0\n内部版本：2 Public\n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖接口：MirlKoi API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android\n\n感谢您的使用！")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击确定按钮后的操作
+                    }
+                })
+                .setCancelable(false); // 不可取消对话框
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showContact() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        }
+        builder.setTitle("如何联系我们")
+                .setMessage("官方邮箱：srinternet@qq.com\n官方QQ群：367798007\n官方抖音号：SRInternet.Sr\n官方 Bilibili：SR思锐Offical（可能会变更）")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击确定按钮后的操作
+                    }
+                })
+                .setCancelable(false); // 不可取消对话框
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void openHTMLInBrowser(String url) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        startActivity(intent);
+
+        // 检查是否有应用程序可以处理打开链接的意图
+        /*if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            // 没有找到可以处理打开链接的应用程序
+            Toast.makeText(this, "没有找到可以打开链接的应用程序", Toast.LENGTH_SHORT).show();
+        }*/
+    }
+
+    public void showConfirmDialog(View view) {
+        ImageView image_view = findViewById(R.id.image_view);
+        Drawable drawable = image_view.getDrawable();
+
+        // 检查是否有正在显示的图片
+        if (drawable != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("要将这张图设置为手机壁纸吗？")
+                    .setMessage("设置壁纸需要一段时间，请不要关闭程序。")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            /*// 用户点击确认按钮的逻辑处理
+                            // 创建一个 AlertDialog.Builder
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setCancelable(false); // 设置为不可取消
+
+                            // 设置对话框显示的布局和消息
+                            LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+                            View dialogView = inflater.inflate(R.layout.progress_dialog, null);
+                            builder.setView(dialogView);
+
+                            // 创建对话框并显示
+                            AlertDialog progressDialog = builder.create();
+                            progressDialog.show();
+
+                            // 创建一个新的线程
+                            dialog.dismiss();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 在这里执行耗时操作，例如加载数据或执行网络请求
+                                    boolean completed = setWallpaperFromImageView(); // 修改此处，添加布尔变量completed声明
+
+                                    // 使用 Handler 在新线程中更新 UI
+                                    Handler handler = new Handler(Looper.getMainLooper());
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // 在主线程中隐藏进度条
+                                            progressDialog.dismiss();
+
+                                            // 执行其他更新 UI 的操作
+                                            if (completed == true) {
+                                                Toast.makeText(MainActivity.this, "成功 设置壁纸", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(MainActivity.this, "无法 设置壁纸", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }).start();*/
+
+
+                            boolean completed = setWallpaperFromImageView();
+
+                            if (completed == true) {
+                                Toast.makeText(MainActivity.this, "成功 设置壁纸", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "无法 设置壁纸", Toast.LENGTH_SHORT).show();
+                            }
+
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // 用户点击取消按钮的逻辑处理
+                            dialog.dismiss();
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private boolean setWallpaperFromImageView() {
+        ImageView image_view = findViewById(R.id.image_view);
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        Drawable drawable = image_view.getDrawable();
+
+// 检查是否有正在显示的图片
+        if (drawable == null) {
+            return false;
+        } else {
+            Bitmap bitmap;
+            if (drawable instanceof BitmapDrawable) {
+                // 如果是BitmapDrawable，则直接获取Bitmap
+                bitmap = ((BitmapDrawable) drawable).getBitmap();
+            } else {
+                // 如果是其他类型的Drawable（如VectorDrawable），则创建一个新的Bitmap并将Drawable绘制到其中
+                int width = drawable.getIntrinsicWidth();
+                int height = drawable.getIntrinsicHeight();
+                Bitmap.Config config = Bitmap.Config.ARGB_8888;
+                bitmap = Bitmap.createBitmap(width, height, config);
+                Canvas canvas = new Canvas(bitmap);
+                drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                drawable.draw(canvas);
+            }
+
+            try {
+                // 计算壁纸的宽度和高度
+                int wallpaperWidth = wallpaperManager.getDesiredMinimumWidth();
+                int wallpaperHeight = wallpaperManager.getDesiredMinimumHeight();
+
+                // 计算图片的宽度和高度
+                int imageWidth = bitmap.getWidth();
+                int imageHeight = bitmap.getHeight();
+
+                // 计算目标宽度和高度，保留纵横比
+                int targetWidth, targetHeight;
+                if (imageWidth > imageHeight) {
+                    targetWidth = wallpaperWidth;
+                    targetHeight = (int) ((float) imageHeight / imageWidth * wallpaperWidth);
+                } else {
+                    targetHeight = wallpaperHeight;
+                    targetWidth = (int) ((float) imageWidth / imageHeight * wallpaperHeight);
+                }
+
+                // 调整图片大小，保持纵横比不变
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
+                // 设置壁纸
+                wallpaperManager.setBitmap(resizedBitmap);
+
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                return false;
+            }
+        }
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, String> {
@@ -228,7 +497,6 @@ public class MainActivity extends AppCompatActivity {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 // 保存图片到缓存并显示在ImageView
                 new SaveImageTask().execute(imageUrl);
-                saveButton.setEnabled(true);
             } else {
                 Toast.makeText(MainActivity.this, "无法获取图片，请检查网络.", Toast.LENGTH_SHORT).show();
             }
@@ -448,11 +716,9 @@ public class MainActivity extends AppCompatActivity {
                 values.put(MediaStore.Images.Media.DATA, imagePath);
             }
             ContentResolver resolver = getContentResolver();
-            synchronized (this) {
                 // 对imageUri进行写入操作
-                imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            }
-            /*Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);*/
+            imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            //Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
             if (imageUri != null) {
                 try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
@@ -653,7 +919,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         isAppInForeground = false;
-        showToastIfAppInBackground();
+
+        //showToastIfAppInBackground();
     }
 
     @Override

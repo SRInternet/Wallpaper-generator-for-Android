@@ -16,6 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -39,6 +40,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.4.0'
