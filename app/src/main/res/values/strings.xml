@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">壁纸生成器</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
 </resources>
