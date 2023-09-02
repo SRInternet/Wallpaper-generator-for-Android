@@ -99,6 +99,7 @@ import android.view.LayoutInflater;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -231,6 +232,26 @@ public class MainActivity extends AppCompatActivity {
                 openHTMLInBrowser(htmlUrl);
             }
         });
+
+        // 获取 ImageView 实例
+        ImageView imageView = findViewById(R.id.image_view);
+
+// 定义图片资源数组
+        int[] imageResources = new int[] {
+                R.drawable.test_resourse1,
+                R.drawable.test_resourse2,
+                R.drawable.test_resourse3,
+                R.drawable.test_resourse4,
+                R.drawable.test_resourse5,
+                R.drawable.test_resourse6
+        };
+
+// 生成一个随机数
+        Random random = new Random();
+        int randomIndex = random.nextInt(imageResources.length);
+
+// 设置随机图片到 ImageView
+        imageView.setImageResource(imageResources[randomIndex]);
 
     }
 
