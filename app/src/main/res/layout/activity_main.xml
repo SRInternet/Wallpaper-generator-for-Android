@@ -104,6 +104,8 @@
 
         <!-- 主要内容区域 -->
 
+        <!-- 侧边栏 -->
+
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigationView"
             android:layout_width="wrap_content"
@@ -118,41 +120,232 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="-91dp">
+                tools:layout_editor_absoluteY="54dp">
 
-                <Button
-                    android:id="@+id/About"
-                    android:layout_width="277dp"
-                    android:layout_height="82dp"
-                    android:layout_marginTop="304dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:drawableStart="@mipmap/ic_about"
-                    android:gravity="start|center_vertical"
-                    android:scaleType="centerCrop"
-                    android:text="  关于本程序"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="285dp"
+                    android:layout_height="158dp"
+
+                    android:src="@drawable/top_background"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_editor_absoluteX="0dp"
-                    app:layout_editor_absoluteY="204dp" />
+                    app:layout_editor_absoluteY="0dp"
+                    tools:visibility="visible" />
 
-                <Button
-                    android:id="@+id/Contact"
-                    android:layout_width="277dp"
-                    android:layout_height="82dp"
-                    android:layout_marginTop="464dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:drawableStart="@mipmap/ic_contact"
-                    android:gravity="start|center_vertical"
-                    android:scaleType="centerCrop"
-                    android:text="  联系我们"
-                    android:textSize="20sp"
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="50dp"
+                    android:shadowColor="#80000000"
+                    android:shadowDx="5"
+                    android:shadowDy="5"
+                    android:shadowRadius="5"
+                    android:text="中秋签到 领福利"
+                    android:textColor="#FFC107"
+                    android:textSize="34sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="0dp"
-                    app:layout_editor_absoluteY="204dp" />
+                    app:layout_editor_absoluteX="14dp"
+                    app:layout_editor_absoluteY="56dp" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="68dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/icon"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_editor_absoluteX="24dp"
+                    app:layout_editor_absoluteY="16dp"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="140dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="104dp"
+                    android:layout_marginTop="28dp"
+                    android:fontFamily="sans-serif"
+                    android:text="壁纸生成器"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_editor_absoluteX="106dp"
+                    app:layout_editor_absoluteY="26dp"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="140dp"
+                    android:layout_height="19dp"
+                    android:layout_marginStart="104dp"
+                    android:layout_marginTop="65dp"
+                    android:fontFamily="sans-serif"
+                    android:text="version 2.0.0"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_editor_absoluteX="106dp"
+                    app:layout_editor_absoluteY="60dp" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="158dp"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#B8B8B8"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="105dp" />
+
+                        <Button
+                            android:id="@+id/Phone_button"
+                            android:layout_width="277dp"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="6dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_phone"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  手机壁纸"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="122dp" />
+
+                        <Button
+                            android:id="@+id/AI_button"
+                            android:layout_width="277dp"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="0dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_recommend"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  AI 推荐的壁纸"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <Button
+                            android:id="@+id/silver_hair"
+                            android:layout_width="277dp"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="0dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_silver_hair"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  银发 类型"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#B8B8B8"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="105dp" />
+
+                        <Button
+                            android:id="@+id/About"
+                            android:layout_width="277dp"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_about"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  关于本程序"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <Button
+                            android:id="@+id/Sponsor"
+                            android:layout_width="277dp"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="0dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_sponsor"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  支持我们"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <Button
+                            android:id="@+id/Contact"
+                            android:layout_width="277dp"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="0dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_contact"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  联系我们"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <Button
+                            android:id="@+id/Update"
+                            android:layout_width="match_parent"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="0dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_silver"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  检查更新"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <TextView
+                            android:id="@+id/textView16"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="end"
+                            android:text="壁纸生成器 Powered by MirlKoi  " />
+                    </LinearLayout>
+                </ScrollView>
 
                 <Button
                     android:id="@+id/Help"
@@ -173,135 +366,9 @@
                     app:layout_editor_absoluteY="122dp"
                     tools:visibility="gone" />
 
-                <Button
-                    android:id="@+id/Sponsor"
-                    android:layout_width="277dp"
-                    android:layout_height="82dp"
-                    android:layout_marginTop="384dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:drawableStart="@mipmap/ic_sponsor"
-                    android:gravity="start|center_vertical"
-                    android:scaleType="centerCrop"
-                    android:text="  支持我们"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="0dp"
-                    app:layout_editor_absoluteY="204dp" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="140dp"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="104dp"
-                    android:layout_marginTop="28dp"
-                    android:fontFamily="sans-serif"
-                    android:text="壁纸生成器"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="106dp"
-                    app:layout_editor_absoluteY="26dp" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="140dp"
-                    android:layout_height="19dp"
-                    android:layout_marginStart="104dp"
-                    android:layout_marginTop="65dp"
-                    android:fontFamily="sans-serif"
-                    android:text="version 2.0.0"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="106dp"
-                    app:layout_editor_absoluteY="60dp" />
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="68dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:src="@drawable/icon"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="24dp"
-                    app:layout_editor_absoluteY="16dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="112dp"
-                    android:background="#B8B8B8"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="0dp"
-                    app:layout_editor_absoluteY="105dp" />
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="296dp"
-                    android:background="#B8B8B8"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="0dp"
-                    app:layout_editor_absoluteY="105dp" />
-
-                <Button
-                    android:id="@+id/Phone_button"
-                    android:layout_width="277dp"
-                    android:layout_height="82dp"
-                    android:layout_marginTop="124dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:drawableStart="@mipmap/ic_phone"
-                    android:gravity="start|center_vertical"
-                    android:scaleType="centerCrop"
-                    android:text="  手机壁纸"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="0dp"
-                    app:layout_editor_absoluteY="122dp" />
-
-                <Button
-                    android:id="@+id/AI_button"
-                    android:layout_width="277dp"
-                    android:layout_height="82dp"
-                    android:layout_marginTop="204dp"
-                    android:backgroundTint="#FFFFFF"
-                    android:drawableStart="@mipmap/ic_recommend"
-                    android:gravity="start|center_vertical"
-                    android:scaleType="centerCrop"
-                    android:text="  AI 推荐的壁纸"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_editor_absoluteX="0dp"
-                    app:layout_editor_absoluteY="204dp" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.navigation.NavigationView>
-
-        <FrameLayout
-            android:id="@+id/mainContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-            tools:visibility="visible">
-
-        </FrameLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -313,9 +380,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_marginStart="18dp"
                 android:layout_marginEnd="18dp"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -348,10 +415,10 @@
                         style="@style/Widget.AppCompat.Button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="0dp"
+                        android:layout_weight="1"
                         android:alpha="0.85"
                         android:background="@drawable/corner_button"
                         android:backgroundTint="#F7F1EA"
@@ -401,8 +468,6 @@
 
             </LinearLayout>
         </ScrollView>
-
-        <!-- 侧边栏 -->
 
     </androidx.drawerlayout.widget.DrawerLayout>
 

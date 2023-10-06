@@ -125,7 +125,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\16936\AppData\Local\Temp\baseline_announcement_24.xml" />
+                                                <entry key="imagePath" value="C:\Users\16936\AppData\Local\Temp\baseline_switch_access_shortcut_add_24.xml" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -137,7 +137,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/announcement/baseline_announcement_24.xml" />
+                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/switch_access_shortcut_add/baseline_switch_access_shortcut_add_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -184,7 +184,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="outputName" value="ic_about" />
+                                      <entry key="outputName" value="ic_have_update" />
                                     </map>
                                   </option>
                                 </PersistentState>

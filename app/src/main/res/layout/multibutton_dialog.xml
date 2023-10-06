@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="让人惊叹！！！(⊙o⊙)"
+        android:textColor="#FF6600"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="79dp"
+        android:paddingBottom="16dp"
+        android:text="    祝贺你，完成了所有签到任务！现在，让我们一起完整、快乐地畅游壁纸生成器，个性化你的手机吧！" />
+
+    <TextView
+        android:id="@+id/dialog_message2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:text="    提取码:SR中秋"
+        android:textColor="#000000" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+        <Button
+            android:id="@+id/button_positive"
+            android:layout_width="114dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/button_no_shadow"
+            android:backgroundTint="#FFFFFF"
+            android:text="领取大礼包"
+            android:textColor="#00BCD4"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_negative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_no_shadow"
+            android:backgroundTint="#FFFFFF"
+            android:text="确定"
+            android:textColor="#00BCD4" />
+
+        </LinearLayout>
+
+    </LinearLayout>
