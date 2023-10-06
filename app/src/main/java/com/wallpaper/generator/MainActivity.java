@@ -42,14 +42,17 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -87,6 +90,9 @@ import android.app.Notification;
 import android.media.RingtoneManager;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.BuildConfig;
+import com.wallpaper.signin.SignInActivity;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import android.content.SharedPreferences;
@@ -100,6 +106,17 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.Random;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -116,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
     private volatile Uri imageUri;
     private volatile boolean stopUpdateProgress = false;
     private String url = "https://api.iw233.cn/api.php?sort=mp&type=json&num=1";
+    private ActivityResultLauncher<String> requestPermissionLauncher;
+    private String Version = "2.1.0";
 
 
 
@@ -134,10 +153,21 @@ public class MainActivity extends AppCompatActivity {
         /*setContentView(R.layout.activity_main);*/
 
         // 弹出信息窗口
+
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                // 权限已授予
+                // 在这里执行相关操作
+            } else {
+                // 权限被拒绝，可以根据需要处理
+            }
+        });
+
         SharedPreferences sharedPreferences = getSharedPreferences("Wallpaper_Generator", MODE_PRIVATE);
         boolean isFirstTime = sharedPreferences.getBoolean("isFirstTime", true);
         if (isFirstTime) {
             // 第一次打开程序的逻辑
+            showInContextUI();
             showDialog();
 
             // 将isFirstTime设置为false，表示程序已经不是首次打开
@@ -208,6 +238,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button silverhair = findViewById(R.id.silver_hair);
+        silverhair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences sharedPreferences = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
+                String CompletedDate = sharedPreferences.getString("CompletedDate", "");
+
+                if (TextUtils.isEmpty(CompletedDate)) {
+                    CompletedDate = "0";
+                }
+
+                int CompletedDate_1 = Integer.parseInt(CompletedDate);
+
+                if (CompletedDate_1 >= 6) {
+                    url = "https://api.iw233.cn/api.php?sort=yin&type=json&num=1";
+
+                    ConstraintLayout constraintLayout = findViewById(R.id.ConstraintLayoutA);
+                    constraintLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.sign_background_blurring));
+
+                    Toast.makeText(MainActivity.this, "将会生成 银发女孩.", Toast.LENGTH_SHORT).show();
+                } else {
+                    showWarning();
+                }
+
+            }
+        });
+
         Button About = findViewById(R.id.About);
         About.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,6 +288,33 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String htmlUrl = "https://afdian.net/a/srinternet";  // 要打开的HTML的URL
                 openHTMLInBrowser(htmlUrl);
+            }
+        });
+
+        TextView Event_text = findViewById(R.id.textView14);
+        Event_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                intent.putExtra("IsFirst", "false");
+                startActivity(intent);
+            }
+        });
+
+        ImageView Event_Img = findViewById(R.id.imageView9);
+        Event_Img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button btnCheckUpdate = findViewById(R.id.Update);
+        btnCheckUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkForUpdate();
             }
         });
 
@@ -256,13 +341,72 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void showInContextUI() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("壁纸生成器 正在获取权限");
+        builder.setMessage("描述：程序需要读取读写您的手机的内部存储以保存生成的图片。若您不同意，则可能导致图片无法正常保存至相册，甚至导致程序闪退。");
+        builder.setPositiveButton("同意", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 用户点击了确定按钮，继续请求权限
+                System.out.println("No Permission！");
+                requestPermissionLauncher.launch(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        PERMISSION_REQUEST_CODE);
+            }
+        });
+        builder.setNegativeButton("不同意", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 用户点击了取消按钮，可以进行一些处理，如禁用相关功能等
+                dialog.dismiss();
+            }
+        });
+        builder.setCancelable(false); // 禁止点击对话框外部取消对话框
+        builder.show();
+    }
+
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            System.out.println("No Permission！");
+            requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(this,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    PERMISSION_REQUEST_CODE);
         }
-        builder.setTitle("欢迎 Welcome")
-                .setMessage("欢迎使用 壁纸生成器手机版 2.0.0 ！\n本次更新主要新增了侧边栏功能项，现已可以生成不同类型的壁纸，快去试试吧！\n若有任何问题，请及时反馈，邮箱：srinternet@qq.com\n欢迎加入QQ群 367798007 与我们交流！\n\n 此消息只显示一次，请认真阅读。")
+        builder.setTitle("喜迎国庆，欢度中秋！")
+                .setMessage("欢迎使用 壁纸生成器 中秋特别版 " + Version + " ！\n全新的《中秋签到领福利》活动已经全面启动，活动无限期！\n坚持每日生成壁纸并签到，连续七天即可解锁全新壁纸类型和se图大礼包！！！\n还在犹豫什么，快点体验吧！\n\n若有任何问题，请及时反馈，邮箱：srinternet@qq.com\n欢迎加入QQ群 367798007 与我们交流！\n\n *此消息只显示一次，请认真阅读。*")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击确定按钮后的操作
+                        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                        intent.putExtra("IsFirst", "true");
+                        startActivity(intent);
+                    }
+                })
+                .setCancelable(false); // 不可取消对话框
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("No Permission！");
+            requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(this,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    PERMISSION_REQUEST_CODE);
+        }
+        builder.setTitle("未解锁")
+                .setMessage("您还未解锁 “银发” 类型的壁纸，请坚持签到，您将很快地解锁这个类型！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -278,10 +422,15 @@ public class MainActivity extends AppCompatActivity {
     private void showAbout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            System.out.println("No Permission！");
+            requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(this,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    PERMISSION_REQUEST_CODE);
         }
         builder.setTitle("关于本程序")
-                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：2.0.0\n内部版本：2 Public\n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖接口：MirlKoi API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android\n\n感谢您的使用！")
+                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：" + Version + "\n内部版本：2 S.E. Public \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：MirlKoi API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android\n\n感谢您的使用！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -297,7 +446,12 @@ public class MainActivity extends AppCompatActivity {
     private void showContact() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            System.out.println("No Permission！");
+            requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(this,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    PERMISSION_REQUEST_CODE);
         }
         builder.setTitle("如何联系我们")
                 .setMessage("官方邮箱：srinternet@qq.com\n官方QQ群：367798007\n官方抖音号：SRInternet.Sr\n官方 Bilibili：SR思锐Offical（可能会变更）")
@@ -470,6 +624,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 // 发起GET请求，获取图片链接
+
                 URL apiUrl = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
                 connection.setRequestMethod("GET");
@@ -670,83 +825,51 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("in this step too");
         /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {*/
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            System.out.println("No Permission！");
+            requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(this,
+                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    PERMISSION_REQUEST_CODE);
         } else {
-// 创建通知
-/*            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT);
-                NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                notificationManager.createNotificationChannel(channel);
-            }
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
-                    .setSmallIcon(R.mipmap.ic_notification)
-                    //.setPriority(NotificationCompat.PRIORITY_MAX)
-                    .setContentTitle("正在保存图片")
-                    .setProgress(0, 0, true)
-                    .setOngoing(true);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder.setChannelId("channel_id");
-
-            }
-            *//*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-            }*//*
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.notify(1, builder.build());
-
-// 执行操作
-            String fileName = System.currentTimeMillis() + ".jpg";
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
-            ContentResolver resolver = getContentResolver();
-            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-            if (imageUri != null) {
-                try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    outputStream.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-// 更新通知
-            builder.setProgress(0, 0, false)
-                    .setContentTitle("保存完成")
-                    .setOngoing(false);
-            notificationManager.notify(1, builder.build());*/
-
-
-
+            Context context = this;
             // 在这里执行保存图片的操作
             String fileName = System.currentTimeMillis() + ".jpg";
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
                 values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+
+                ContentResolver resolver = context.getContentResolver();
+                Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                if (imageUri != null) {
+                    try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                        outputStream.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else {
                 String pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
                 String imagePath = pictureDirectory + "/" + fileName;
 
+                ContentValues values = new ContentValues();
                 values.put(MediaStore.Images.Media.DATA, imagePath);
-            }
-            ContentResolver resolver = getContentResolver();
-                // 对imageUri进行写入操作
-            imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            //Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-            if (imageUri != null) {
-                try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    outputStream.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                ContentResolver resolver = context.getContentResolver();
+                Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                if (imageUri != null) {
+                    try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                        outputStream.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 // 通知相册更新
@@ -964,6 +1087,247 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(context, "return to background", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void checkForUpdate() {
+        OkHttpClient client = new OkHttpClient(); // 创建 OkHttp 客户端
+        Request request = new Request.Builder()
+                .url("https://api.github.com/repos/SRInternet/Wallpaper-generator-for-Android/releases") // 替换成你的仓库信息
+                .addHeader("Authorization", "token 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") // 添加 Authorization 标头
+                .build();
+
+        client.newCall(request).enqueue(new Callback() { // 异步发送 HTTP 请求
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseData = response.body().string();
+                        JSONArray releasesArray = new JSONArray(responseData);
+                        if (releasesArray.length() > 0) {
+                            JSONObject latestRelease = releasesArray.getJSONObject(0); // 获取最新发布的版本
+                            String latestVersion = latestRelease.getString("tag_name"); // 获取最新版本号
+                            String Text = latestRelease.getString("body"); // 获取最新版本描述
+                            String html_url = latestRelease.getString("html_url"); // 获取最新版本仓库链接
+
+                            String browserDownloadUrl = null;
+                            JSONArray assets = latestRelease.getJSONArray("assets"); // 获取最新版本下载链接
+
+                            if (assets.length() > 0) {
+                                // 遍历 assets 数组，筛选出目标文件的 browser_download_url
+                                for (int i = 0; i < assets.length(); i++) {
+                                    JSONObject asset = assets.getJSONObject(i);
+                                    browserDownloadUrl = asset.getString("browser_download_url");
+                                    // 进行其他操作，比如打印或存储
+                                    System.out.println("目标文件的 browser_download_url: " + browserDownloadUrl);
+                                }
+                            } else {
+                                System.out.println("没有找到目标文件。");
+                            }
+                            compareVersions(latestVersion, Text, html_url, browserDownloadUrl); // 比较版本号
+                        } else {
+                            // 没有发布的版本
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                System.out.println("No Permission！");
+                                requestPermissionLauncher.launch(
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                                        PERMISSION_REQUEST_CODE);
+                            }
+
+                            Looper.prepare(); // 添加此行
+
+                            builder.setTitle("找不到版本")
+                                    .setMessage("请稍后重试，或向开发者反馈。\n您可以在“联系我们”中查看与开发者们取得联系。")
+                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // 点击确定按钮后的操作
+
+                                        }
+                                    })
+                                    .setCancelable(false); // 不可取消对话框
+
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                            Looper.loop(); // 添加此行
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    // 请求失败
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        System.out.println("No Permission！");
+                        requestPermissionLauncher.launch(
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                                PERMISSION_REQUEST_CODE);
+                    }
+
+                    Looper.prepare(); // 添加此行
+
+                    builder.setTitle("已连接，但是请求失败")
+                            .setMessage("请稍后重试，或前往Github仓库手动检查更新。\n您可以在“关于本程序”中查看Github仓库信息。")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // 点击确定按钮后的操作
+
+                                }
+                            })
+                            .setCancelable(false); // 不可取消对话框
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    Looper.loop(); // 添加此行
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // 网络请求失败
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("No Permission！");
+                    requestPermissionLauncher.launch(
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                            PERMISSION_REQUEST_CODE);
+                }
+
+                Looper.prepare(); // 添加此行
+
+                builder.setTitle("无网络，或连接失败")
+                        .setMessage("无法连接到服务器，请检查设备的网络状态，以及程序的网络请求权限是否已经给予，并在稍后重试。")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击确定按钮后的操作
+
+                            }
+                        })
+                        .setCancelable(false); // 不可取消对话框
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                Looper.loop(); // 添加此行
+            }
+        });
+    }
+
+    public void compareVersions(String latestVersion, String Text, String html_url, String browserDownloadUrl) {
+        String currentVersion = Version;  // 替换成你实际的版本获取方式
+        String pureVersionName = currentVersion.replaceAll("[^\\d.]+", "");
+        currentVersion = pureVersionName;
+        System.out.println(currentVersion);
+
+        String purelatestVersion = latestVersion.replaceAll("[^\\d.]+", "");
+        latestVersion = purelatestVersion;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View customView = inflater.inflate(R.layout.update_dialog, null);
+        builder.setView(customView);
+
+        ImageView icon = customView.findViewById(R.id.imageView10);
+
+        icon.setImageResource(R.mipmap.ic_have_update);
+
+        Button button1 = customView.findViewById(R.id.button_positive);
+        Button button2 = customView.findViewById(R.id.button_negative);
+        Button button3 = customView.findViewById(R.id.button_update);
+
+        TextView DialogTitle = customView.findViewById(R.id.dialog_title);
+        TextView DialogMessage = customView.findViewById(R.id.dialog_message);
+        TextView DialogMessage2 = customView.findViewById(R.id.dialog_message2);
+
+        DialogMessage2.setText("    当前版本：" + currentVersion);
+
+        // 进行版本对比，判断是否需要更新
+        if (latestVersion.compareTo(currentVersion) > 0) {
+            // 需要更新，弹出更新对话框或其他相应操作
+
+            DialogTitle.setText("发现新版本！");
+            DialogMessage.setText("    最新版本：" + latestVersion + "\n\n" + Text);
+
+            Looper.prepare(); // 添加此行
+
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            button1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String htmlUrl = html_url;  // 要打开的HTML的URL
+                    openHTMLInBrowser(htmlUrl);
+                    dialog.dismiss();
+                }
+            });
+
+            button3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String htmlUrl = browserDownloadUrl;  // 要打开的HTML的URL
+                    openHTMLInBrowser(htmlUrl);
+                    dialog.dismiss();
+                }
+            });
+
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            Looper.loop(); // 添加此行
+
+
+        } else {
+            // 已是最新版本
+            DialogTitle.setText("无更新版本");
+            DialogMessage.setText("本版本更新信息：\n" + Text);
+            button3.setTextColor(Color.parseColor("#808080"));
+            button2.setText("确定");
+
+            Looper.prepare(); // 添加此行
+
+            button1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String htmlUrl = html_url;  // 要打开的HTML的URL
+                    openHTMLInBrowser(htmlUrl);
+                }
+            });
+
+            button3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Nothing there
+                }
+            });
+
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            Looper.loop(); // 添加此行
         }
     }
 /*    public boolean isAppInBackground() {

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:src="@mipmap/ic_have_update"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="322dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="无更新信息"
+            android:textColor="#009688"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <TextView
+            android:id="@+id/dialog_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:text="    None"></TextView>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/dialog_message2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:paddingTop="10dp"
+        android:text="    当前版本：2.1.0"
+        android:textColor="#000000" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+        <Button
+            android:id="@+id/button_positive"
+            android:layout_width="146dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/button_no_shadow"
+            android:backgroundTint="#FFFFFF"
+            android:text="前往 Github 仓库"
+            android:textColor="#00BCD4"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_update"
+            android:layout_width="116dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_no_shadow"
+            android:backgroundTint="#FFFFFF"
+            android:text="立刻下载更新"
+            android:textColor="#00BCD4"
+            android:textStyle="bold"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/button_negative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_no_shadow"
+            android:backgroundTint="#FFFFFF"
+            android:text="暂不更新"
+            android:textColor="#00BCD4" />
+
+        </LinearLayout>
+
+    </LinearLayout>
