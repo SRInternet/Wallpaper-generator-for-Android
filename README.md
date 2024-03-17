@@ -1,6 +1,7 @@
 
 # 🎉Wallpaper-generator-for-Android
  在您的安卓设备上帮助你快速生成一张手机动漫壁纸并保存👍
+ *本系列产品包含 [Windows 版](https://github.com/SRInternet/Wallpaper-generator/) 和 [独立分支](https://github.com/SRInternet/Pixiv-generator/)。
 
 ## 详细信息
 
