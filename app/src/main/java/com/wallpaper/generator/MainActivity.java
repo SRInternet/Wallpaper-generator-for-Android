@@ -139,7 +139,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        // 重要注释：代码中部分敏感字符串存储的xml文件未推送至存储库，请注意处理所有报错的地方
+        // proxy：私有Pixiv反代服务器；cid：Microsoft Clarity 项目ID
+        // GitHeaderName与GitPassport：代表GitHub私有令牌
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
