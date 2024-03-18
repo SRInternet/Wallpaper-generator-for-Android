@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.wallpaper.generator.PixivGeneratorActivity"
+    android:padding="0dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView17"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/pixiv_backgrund"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/toggleButton"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="53dp"
+                        android:layout_height="53dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:alpha="0.85"
+                        android:background="@drawable/corner_button"
+                        android:backgroundTint="#F7F1EA"
+                        android:fontFamily="sans-serif"
+                        android:text="▼"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/download_button"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_weight="1"
+                        android:alpha="0.85"
+                        android:background="@drawable/corner_button"
+                        android:backgroundTint="#F7F1EA"
+                        android:fontFamily="sans-serif"
+                        android:text="开始浏览 Pixiv"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="750dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
+                    android:alpha="0.85"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:outlineProvider="bounds"
+                    android:visibility="visible"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.515"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.85"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="生成的图片"
+                        android:onClick="settingsShow" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/LeftButton"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="53dp"
+                        android:layout_height="53dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginBottom="0dp"
+                        android:alpha="0.85"
+                        android:background="@drawable/corner_button"
+                        android:backgroundTint="#F7F1EA"
+                        android:fontFamily="sans-serif"
+                        android:rotation="180"
+                        android:text="▶"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/download_button2"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_weight="1"
+                        android:alpha="0.85"
+                        android:background="@drawable/corner_button"
+                        android:backgroundTint="#F7F1EA"
+                        android:fontFamily="sans-serif"
+                        android:text="没有图片"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/RightButton"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="53dp"
+                        android:layout_height="53dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="0dp"
+                        android:alpha="0.85"
+                        android:background="@drawable/corner_button"
+                        android:backgroundTint="#F7F1EA"
+                        android:fontFamily="sans-serif"
+                        android:text="▶"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/AboutText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="start"
+                    android:text="关于 Pixiv 生成器（壁纸生成器）"
+                    android:textColor="#BFBFBF"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:onClick="showAbout"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/NavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="430dp"
+            android:layout_marginTop="-430dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="visible"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:gravity="center"
+                    android:text="浏览配置"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/corner_text"
+                    android:drawableLeft="@mipmap/ic_author"
+                    android:drawablePadding="8dp"
+                    android:ems="10"
+                    android:hint="指定作者的 UID (可选)"
+                    android:inputType="number"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#0067c9" />
+
+                <Switch
+                    android:id="@+id/switch1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:baselineAligned="false"
+                    android:text="包含 R-18"
+                    android:textColor="#d8525f"
+                    android:textStyle="bold"
+                    android:thumbTint="#2f80ed"
+                    android:trackTint="#004c95" />
+
+                <Switch
+                    android:id="@+id/switch2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:text="排开包含 AI 标签的图片"
+                    android:thumbTint="#2f80ed"
+                    android:trackTint="#004c95" />
+
+                <EditText
+                    android:id="@+id/editTextText1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/corner_text"
+                    android:drawableLeft="@mipmap/ic_tag"
+                    android:drawablePadding="8dp"
+                    android:ems="10"
+                    android:hint="标签 (用 &amp; 连接多个标签)"
+                    android:inputType="text"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#0067c9" />
+
+                <TextView
+                    android:id="@+id/textModel"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/underline_text"
+                    android:gravity="end"
+                    android:text="示例标签 "
+                    android:textColor="#008577"
+                    android:textStyle="bold|italic" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="    生成数量 (默认为 1 )"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/options_array" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button2"
+                    style="@drawable/corner_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/pixiv_button"
+                    android:text="完成配置"
+                    android:textColor="#fafafa" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ProgressLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="356dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ProgressText"
+                        android:layout_width="300dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="   正在浏览 Pixiv 准备"
+                        android:textColor="#151515"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:progressTint="#2f80ed" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.navigation.NavigationView>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

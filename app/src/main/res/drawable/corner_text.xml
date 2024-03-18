@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="MissingDefaultResource">
+      <!-- 设置按钮的填充颜色 -->
+    <corners android:radius="1000dp"/> <!-- 设置圆角半径 -->
+    <stroke
+        android:color="#0082fc"
+        android:width="2dp" />
+</shape>

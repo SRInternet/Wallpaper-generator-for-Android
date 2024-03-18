@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
         android:paddingTop="10dp"
-        android:text="    当前版本：2.1.0"
+        android:text="    当前版本：3.0.0"
         android:textColor="#000000" />
 
     <LinearLayout
@@ -79,7 +79,7 @@
             android:layout_weight="1"
             android:background="@drawable/button_no_shadow"
             android:backgroundTint="#FFFFFF"
-            android:text="立刻下载更新"
+            android:text="下载"
             android:textColor="#00BCD4"
             android:textStyle="bold"
             tools:visibility="visible" />

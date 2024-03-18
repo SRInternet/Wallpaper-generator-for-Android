@@ -106,6 +106,105 @@
 
         <!-- 侧边栏 -->
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            tools:visibility="visible">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/toggleButton"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="53dp"
+                        android:layout_height="53dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:alpha="0.85"
+                        android:background="@drawable/corner_button"
+                        android:backgroundTint="#F7F1EA"
+                        android:fontFamily="sans-serif"
+                        android:text="≡"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/download_button"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_weight="1"
+                        android:alpha="0.85"
+                        android:background="@drawable/corner_button"
+                        android:backgroundTint="#F7F1EA"
+                        android:fontFamily="sans-serif"
+                        android:text="一键生成并保存"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="750dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="16dp"
+                    android:alpha="0.85"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:outlineProvider="bounds"
+                    android:visibility="visible"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.515"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:alpha="0.85"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="生成的图片"
+                        android:onClick="showConfirmDialog" />
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+        </ScrollView>
+
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigationView"
             android:layout_width="wrap_content"
@@ -124,10 +223,10 @@
 
                 <ImageView
                     android:id="@+id/imageView9"
-                    android:layout_width="285dp"
+                    android:layout_width="match_parent"
                     android:layout_height="158dp"
-
-                    android:src="@drawable/top_background"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/find1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -139,14 +238,14 @@
                     android:id="@+id/textView14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="50dp"
                     android:shadowColor="#80000000"
                     android:shadowDx="5"
                     android:shadowDy="5"
                     android:shadowRadius="5"
-                    android:text="中秋签到 领福利"
-                    android:textColor="#FFC107"
+                    android:text="“双诞” 狂欢盛典"
+                    android:textColor="	#FF6A6A"
                     android:textSize="34sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -224,7 +323,7 @@
 
                         <Button
                             android:id="@+id/Phone_button"
-                            android:layout_width="277dp"
+                            android:layout_width="match_parent"
                             android:layout_height="82dp"
                             android:layout_marginTop="6dp"
                             android:backgroundTint="#FFFFFF"
@@ -239,7 +338,7 @@
 
                         <Button
                             android:id="@+id/AI_button"
-                            android:layout_width="277dp"
+                            android:layout_width="match_parent"
                             android:layout_height="82dp"
                             android:layout_marginTop="0dp"
                             android:backgroundTint="#FFFFFF"
@@ -254,7 +353,7 @@
 
                         <Button
                             android:id="@+id/silver_hair"
-                            android:layout_width="277dp"
+                            android:layout_width="match_parent"
                             android:layout_height="82dp"
                             android:layout_marginTop="0dp"
                             android:backgroundTint="#FFFFFF"
@@ -262,6 +361,46 @@
                             android:gravity="start|center_vertical"
                             android:scaleType="centerCrop"
                             android:text="  银发 类型"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#B8B8B8"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="105dp" />
+
+                        <Button
+                            android:id="@+id/chunjiede"
+                            android:layout_width="match_parent"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="8dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_child_allow"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  无涩图"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_editor_absoluteX="0dp"
+                            app:layout_editor_absoluteY="204dp" />
+
+                        <Button
+                            android:id="@+id/PixivBrowser"
+                            android:layout_width="match_parent"
+                            android:layout_height="82dp"
+                            android:layout_marginTop="0dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableStart="@mipmap/ic_pixiv"
+                            android:gravity="start|center_vertical"
+                            android:scaleType="centerCrop"
+                            android:text="  浏览 Pixiv"
+                            android:textColor="#2f80ed"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_editor_absoluteX="0dp"
@@ -278,7 +417,7 @@
 
                         <Button
                             android:id="@+id/About"
-                            android:layout_width="277dp"
+                            android:layout_width="match_parent"
                             android:layout_height="82dp"
                             android:layout_marginTop="8dp"
                             android:backgroundTint="#FFFFFF"
@@ -293,7 +432,7 @@
 
                         <Button
                             android:id="@+id/Sponsor"
-                            android:layout_width="277dp"
+                            android:layout_width="match_parent"
                             android:layout_height="82dp"
                             android:layout_marginTop="0dp"
                             android:backgroundTint="#FFFFFF"
@@ -308,7 +447,7 @@
 
                         <Button
                             android:id="@+id/Contact"
-                            android:layout_width="277dp"
+                            android:layout_width="match_parent"
                             android:layout_height="82dp"
                             android:layout_marginTop="0dp"
                             android:backgroundTint="#FFFFFF"
@@ -369,105 +508,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.navigation.NavigationView>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-            tools:visibility="visible">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/toggleButton"
-                        style="@style/Widget.AppCompat.Button"
-                        android:layout_width="53dp"
-                        android:layout_height="53dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="0dp"
-                        android:alpha="0.85"
-                        android:background="@drawable/corner_button"
-                        android:backgroundTint="#F7F1EA"
-                        android:fontFamily="sans-serif"
-                        android:text="≡"
-                        android:textColor="#000000"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/download_button"
-                        style="@style/Widget.AppCompat.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="0dp"
-                        android:layout_weight="1"
-                        android:alpha="0.85"
-                        android:background="@drawable/corner_button"
-                        android:backgroundTint="#F7F1EA"
-                        android:fontFamily="sans-serif"
-                        android:text="一键生成并保存"
-                        android:textColor="#000000"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </LinearLayout>
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="750dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="16dp"
-                    android:alpha="0.85"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:outlineProvider="bounds"
-                    android:visibility="visible"
-                    app:cardCornerRadius="15dp"
-                    app:cardElevation="0dp"
-                    app:cardPreventCornerOverlap="false"
-                    app:cardUseCompatPadding="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.515"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/image_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:adjustViewBounds="true"
-                        android:alpha="0.85"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="生成的图片"
-                        android:onClick="showConfirmDialog" />
-                </androidx.cardview.widget.CardView>
-
-
-            </LinearLayout>
-        </ScrollView>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 

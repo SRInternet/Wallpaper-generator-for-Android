@@ -37,6 +37,7 @@ import android.widget.Toast;
 import java.io.IOException;*/
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -48,7 +49,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -63,7 +63,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -86,25 +85,25 @@ import android.app.NotificationManager;
 import android.app.NotificationChannel;
 
 import androidx.core.app.NotificationCompat;
-import android.app.Notification;
-import android.media.RingtoneManager;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.BuildConfig;
 import com.wallpaper.signin.SignInActivity;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import android.content.SharedPreferences;
 import android.app.WallpaperManager;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.Canvas;
-import androidx.core.content.FileProvider;
 import android.view.LayoutInflater;
-import android.os.Handler;
 import android.os.Looper;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Objects;
 import java.util.Random;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -115,8 +114,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -127,14 +124,15 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private long backButtonPressedTime = 0;
     private boolean isAppInBackground = true; // 标记应用是否在后台
-    private boolean completed = false;
+    //private boolean completed = false;
 
     private boolean isAppInForeground = false;
     private volatile Uri imageUri;
     private volatile boolean stopUpdateProgress = false;
     private String url = "https://api.iw233.cn/api.php?sort=mp&type=json&num=1";
     private ActivityResultLauncher<String> requestPermissionLauncher;
-    private String Version = "2.1.0";
+    private final String Version = "3.1.0";
+
 
 
 
@@ -163,12 +161,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Wallpaper_Generator", MODE_PRIVATE);
+//        Calendar calendar = Calendar.getInstance();
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        String currentDate = dateFormat.format(calendar.getTime());
+//        SharedPreferences sharedPreferences2 = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
+//
+//        String savedDate = sharedPreferences2.getString("currentDate", "0");
+//
+//        if (!savedDate.equals(currentDate)) {
+//
+//            SharedPreferences.Editor editor = sharedPreferences2.edit();
+//            editor.putString("daliy_task_process", "0");
+//            editor.apply();
+//
+//        }
+
+        SharedPreferences sharedPreferences = getSharedPreferences("WPGenerator", MODE_PRIVATE);
         boolean isFirstTime = sharedPreferences.getBoolean("isFirstTime", true);
         if (isFirstTime) {
+
+            SharedPreferences sharedPreferences1 = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor1 = sharedPreferences1.edit();
+            editor1.clear();
+            editor1.apply();
+
             // 第一次打开程序的逻辑
             showInContextUI();
-            showDialog();
 
             // 将isFirstTime设置为false，表示程序已经不是首次打开
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -242,26 +260,36 @@ public class MainActivity extends AppCompatActivity {
         silverhair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                url = "https://api.iw233.cn/api.php?sort=yin&type=json&num=1";
 
-                SharedPreferences sharedPreferences = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
-                String CompletedDate = sharedPreferences.getString("CompletedDate", "");
+                ConstraintLayout constraintLayout = findViewById(R.id.ConstraintLayoutA);
+                constraintLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.sign_background_blurring));
 
-                if (TextUtils.isEmpty(CompletedDate)) {
-                    CompletedDate = "0";
-                }
+                Toast.makeText(MainActivity.this, "将会生成 银发女孩.", Toast.LENGTH_SHORT).show();
 
-                int CompletedDate_1 = Integer.parseInt(CompletedDate);
+            }
+        });
 
-                if (CompletedDate_1 >= 6) {
-                    url = "https://api.iw233.cn/api.php?sort=yin&type=json&num=1";
+        Button chunjiede = findViewById(R.id.chunjiede);
+        chunjiede.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                url = "https://api.iw233.cn/api.php?sort=iw233&type=json&num=1";
 
-                    ConstraintLayout constraintLayout = findViewById(R.id.ConstraintLayoutA);
-                    constraintLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.sign_background_blurring));
+                ConstraintLayout constraintLayout = findViewById(R.id.ConstraintLayoutA);
+                constraintLayout.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.chaste));
 
-                    Toast.makeText(MainActivity.this, "将会生成 银发女孩.", Toast.LENGTH_SHORT).show();
-                } else {
-                    showWarning();
-                }
+                Toast.makeText(MainActivity.this, "已禁用所有其他图片模式.", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        Button pixivb = findViewById(R.id.PixivBrowser);
+        pixivb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PixivGeneratorActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -307,6 +335,44 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SignInActivity.class);
                 startActivity(intent);
+//                ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+//                ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+//                activityManager.getMemoryInfo(memoryInfo);
+//
+//                long availableMemory = memoryInfo.availMem;
+//                long requiredMemory = 280351962; // 将 MB 转换为 byte
+//
+//                System.out.println("可用内存" + availableMemory);
+//
+//                if (availableMemory >= requiredMemory) {
+//                    // 可用内存大于等于243MB
+//                    // 执行相应的操作
+//
+//                } else {
+//                    // 可用内存小于243MB
+//                    // 执行相应的操作或提示用户
+//
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                    builder.setTitle("无法打开活动页") // 设置对话框标题
+//                            .setMessage("内存不足。请释放内存，尽可能地使内存达到最低限制 267MB (280351962) 以确保程序不会闪退。") // 设置对话框内容
+////                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+////                                public void onClick(DialogInterface dialog, int id) {
+////                                    // 点击确定按钮后的逻辑处理
+////                                }
+////                            })
+//                            .setNegativeButton("好的", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    // 点击取消按钮后的逻辑处理
+//                                    dialog.dismiss(); // 关闭对话框
+//                                }
+//                            });
+//
+//// 创建并显示对话框
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
+//
+//                }
+
             }
         });
 
@@ -340,6 +406,96 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void reward_show(String reward_name, Boolean saving, int image) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View customView = inflater.inflate(R.layout.reward_dialog, null);
+        builder.setView(customView);
+
+        Button button1 = customView.findViewById(R.id.button_negative2);
+        Button button2 = customView.findViewById(R.id.button_negative);
+        TextView dialog_title = customView.findViewById(R.id.dialog_title);
+        ImageView imageView_inside = customView.findViewById(R.id.imageView10);
+        TextView dialog_message = customView.findViewById(R.id.dialog_message2);
+
+        Glide.with(this)
+                .load(image)
+                .into(imageView_inside);
+
+        dialog_message.setText("前往活动页点击【立即签到】查看活动进度");
+
+        if (saving == Boolean.FALSE) {
+            dialog_title.setText(reward_name + " 未达成");
+            button1.setTextColor(Color.parseColor("#a1a3a6"));
+        } else {
+            dialog_title.setText(reward_name + " 已达成");
+            button1.setTextColor(Color.parseColor("#00BCD4"));
+        }
+
+        button1.setEnabled(saving);
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Button 1 的点击事件逻辑
+                // 在这里写下你希望 Button 1 点击后执行的代码
+
+                // String htmlUrl = "https://www.123pan.com/s/2bLlVv-gJKph.html";  // 要打开的HTML的URL
+                String savedImageURL = null;
+                String savedImageURL1 = null;
+                String savedImageURL2 = null;
+                String savedImageURL3 = null;
+
+
+                if (Objects.equals(reward_name, "圣诞限定礼包")) {
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.third_day);
+                    savedImageURL2 = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, reward_name, reward_name);
+                    Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.third_day1);
+                    savedImageURL1 = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap1, reward_name, reward_name);
+                    Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.third_day2);
+                    savedImageURL = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap2, reward_name, reward_name);
+                    Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.third_day3);
+                    savedImageURL3 = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap3, reward_name, reward_name);
+
+                    if (savedImageURL != null && savedImageURL1 != null && savedImageURL2 != null && savedImageURL3 != null) {
+                        Toast.makeText(getApplicationContext(), "保存成功！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "保存失败！请检查权限", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else if (Objects.equals(reward_name, "大图集")) {
+                    String htmlUrl = "https://cloudreve.srinternet.top/s/lws0";  // 要打开的HTML的URL
+                    openHTMLInBrowser(htmlUrl);
+                } else {
+                    Drawable drawable = imageView_inside.getDrawable();
+                    Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+
+                    savedImageURL = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, reward_name, reward_name);
+
+                    if (savedImageURL != null) {
+                        Toast.makeText(getApplicationContext(), "保存成功！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "保存失败！请检查权限", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Button 2 的点击事件逻辑
+                // 在这里写下你希望 Button 2 点击后执行的代码
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     private void showInContextUI() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -349,12 +505,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // 用户点击了确定按钮，继续请求权限
-                System.out.println("No Permission！");
+                System.out.println("没有权限！");
                 requestPermissionLauncher.launch(
                         Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                System.out.println("没有权限1213！");
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
                         PERMISSION_REQUEST_CODE);
+                System.out.println("没有权限56546！");
+                showDialog();
             }
         });
         builder.setNegativeButton("不同意", new DialogInterface.OnClickListener() {
@@ -362,6 +521,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // 用户点击了取消按钮，可以进行一些处理，如禁用相关功能等
                 dialog.dismiss();
+                showDialog();
             }
         });
         builder.setCancelable(false); // 禁止点击对话框外部取消对话框
@@ -371,15 +531,16 @@ public class MainActivity extends AppCompatActivity {
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            System.out.println("No Permission！");
+
             requestPermissionLauncher.launch(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
             ActivityCompat.requestPermissions(this,
                     new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
                     PERMISSION_REQUEST_CODE);
+            System.out.println("No Permission！");
         }
-        builder.setTitle("喜迎国庆，欢度中秋！")
-                .setMessage("欢迎使用 壁纸生成器 中秋特别版 " + Version + " ！\n全新的《中秋签到领福利》活动已经全面启动，活动无限期！\n坚持每日生成壁纸并签到，连续七天即可解锁全新壁纸类型和se图大礼包！！！\n还在犹豫什么，快点体验吧！\n\n若有任何问题，请及时反馈，邮箱：srinternet@qq.com\n欢迎加入QQ群 367798007 与我们交流！\n\n *此消息只显示一次，请认真阅读。*")
+        builder.setTitle("欢庆《壁纸生成器》一周年！")
+                .setMessage("欢迎使用 壁纸生成器 " + Version + " ！\n全新的《”双诞“特别活动》活动已经全面启动，活动无限期！\n超多特别勋章等你解锁，还有超级大图集！\n还在犹豫什么，快点体验吧！\n\n若有任何问题，请及时反馈，邮箱：srinternet@qq.com\n欢迎加入QQ群 367798007 与我们交流！\n\n *此消息只显示一次，请认真阅读。*")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -395,29 +556,29 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showWarning() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            System.out.println("No Permission！");
-            requestPermissionLauncher.launch(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            ActivityCompat.requestPermissions(this,
-                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                    PERMISSION_REQUEST_CODE);
-        }
-        builder.setTitle("未解锁")
-                .setMessage("您还未解锁 “银发” 类型的壁纸，请坚持签到，您将很快地解锁这个类型！")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 点击确定按钮后的操作
-                    }
-                })
-                .setCancelable(false); // 不可取消对话框
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+//    private void showWarning() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            System.out.println("No Permission！");
+//            requestPermissionLauncher.launch(
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//            ActivityCompat.requestPermissions(this,
+//                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+//                    PERMISSION_REQUEST_CODE);
+//        }
+//        builder.setTitle("未解锁")
+//                .setMessage("您还未解锁 “银发” 类型的壁纸，请坚持签到，您将很快地解锁这个类型！")
+//                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // 点击确定按钮后的操作
+//                    }
+//                })
+//                .setCancelable(false); // 不可取消对话框
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
 
     private void showAbout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -430,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
                     PERMISSION_REQUEST_CODE);
         }
         builder.setTitle("关于本程序")
-                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：" + Version + "\n内部版本：2 S.E. Public \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：MirlKoi API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android\n\n感谢您的使用！")
+                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：" + Version + "\n内部版本：3.1 New Year of 2024 \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：MirlKoi API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android（已停止开源）\n\n感谢您的使用！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -536,8 +697,26 @@ public class MainActivity extends AppCompatActivity {
 
                             boolean completed = setWallpaperFromImageView();
 
-                            if (completed == true) {
+                            SharedPreferences sharedPreferences1 = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
+                            String big_voyage = sharedPreferences1.getString("big_voyage", "0");
+
+                            int process = Integer.parseInt(big_voyage);
+                            int now_process = process + 1;
+
+                            SharedPreferences.Editor editor = sharedPreferences1.edit();
+                            editor.putString("big_voyage", Integer.toString(now_process));
+                            editor.apply();
+
+                            if (completed) {
                                 Toast.makeText(MainActivity.this, "成功 设置壁纸", Toast.LENGTH_SHORT).show();
+
+                                if (now_process >= 5) {
+                                    if (!IsRewardShowed("【大航海！】勋章")) {
+                                        reward_show("【大航海！】勋章", Boolean.TRUE, R.drawable.bigvoyage);
+                                        RewardShowed("【大航海！】勋章");
+                                    };
+                                }
+
                             } else {
                                 Toast.makeText(MainActivity.this, "无法 设置壁纸", Toast.LENGTH_SHORT).show();
                             }
@@ -687,6 +866,15 @@ public class MainActivity extends AppCompatActivity {
 
             // 显示正在生成的Toast消息
             Toast.makeText(MainActivity.this, "正在生成，请等待", Toast.LENGTH_LONG).show();
+            SharedPreferences sharedPreferences1 = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
+            String daily_task1 = sharedPreferences1.getString("daliy_task", "0");
+
+            int process11 = Integer.parseInt(daily_task1);
+            int now_process = process11 + 1;
+
+            SharedPreferences.Editor editor = sharedPreferences1.edit();
+            editor.putString("daliy_task", Integer.toString(now_process));
+            editor.apply();
         }
         @Override
         protected Void doInBackground(String... params) {
@@ -817,6 +1005,79 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             Toast.makeText(MainActivity.this, "图片已保存。", Toast.LENGTH_SHORT).show();
+
+            //单日任务判断检测
+            SharedPreferences sharedPreferences1 = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
+            String daily_task = sharedPreferences1.getString("daliy_task", "0");
+
+            int process = Integer.parseInt(daily_task);
+
+            if (process >= 5 && process < 20) {
+                if (!IsRewardShowed("【初阶二次元】勋章")) {
+                    reward_show("【初阶二次元】勋章", Boolean.TRUE, R.drawable.fstage);
+                    RewardShowed("【初阶二次元】勋章");
+                };
+            } else if (process >= 20 && process < 50) {
+                if (!IsRewardShowed("【萝莉控！】勋章")) {
+                    reward_show("【萝莉控！】勋章", Boolean.TRUE, R.drawable.lolicon);
+                    RewardShowed("【萝莉控！】勋章");
+                }
+
+            } else if (process >= 50 && process < 100) {
+                if (!IsRewardShowed("【一定有其他目的】勋章")) {
+                    reward_show("【一定有其他目的】勋章", Boolean.TRUE, R.drawable.otherpurpose);
+                    RewardShowed("【一定有其他目的】勋章");
+                }
+
+            } else if (process >= 100) {
+                if (!IsRewardShowed("【最喜欢啦！】勋章")) {
+                    reward_show("【最喜欢啦！】勋章", Boolean.TRUE, R.drawable.bestlove);
+                    RewardShowed("【最喜欢啦！】勋章");
+                }
+
+            } else {
+                // Nothing here
+            }
+
+            if (Objects.equals(url, "https://api.iw233.cn/api.php?sort=yin&type=json&num=1")) {
+                String white_hair = sharedPreferences1.getString("white_hair", "0");
+
+                int process2 = Integer.parseInt(white_hair);
+                int now_process1 = process2 + 1;
+
+                SharedPreferences.Editor editor = sharedPreferences1.edit();
+                editor.putString("white_hair", Integer.toString(now_process1));
+                editor.apply();
+
+                if (now_process1 >= 50) {
+                    if (!IsRewardShowed("【白毛什么的我最喜欢啦】勋章")) {
+                        reward_show("【白毛什么的我最喜欢啦】勋章", Boolean.TRUE, R.drawable.whitehair);
+                        RewardShowed("【白毛什么的我最喜欢啦】勋章");
+                    };
+                }
+
+            }
+
+            if (Objects.equals(url, "https://api.iw233.cn/api.php?sort=iw233&type=json&num=1")) {
+                String chunjie = sharedPreferences1.getString("chunjie", "0");
+
+                int process1 = Integer.parseInt(chunjie);
+                int now_process = process1 + 1;
+
+                SharedPreferences.Editor editor = sharedPreferences1.edit();
+                editor.putString("chunjie", Integer.toString(now_process));
+                editor.apply();
+
+                if (now_process >= 25) {
+                    if (!IsRewardShowed("【我还很纯洁呢~】勋章")) {
+                        reward_show("【我还很纯洁呢~】勋章", Boolean.TRUE, R.drawable.pcsucaii);
+                        RewardShowed("【我还很纯洁呢~】勋章");
+                    };
+                }
+
+            }
+
+
         }
     }
 
@@ -915,7 +1176,10 @@ public class MainActivity extends AppCompatActivity {
                                         File imageFile = new File(imagePath);
                                         if (imageFile.exists()) {
                                             Uri imageUrl = Uri.fromFile(imageFile);
-                                            imageView.setImageURI(imageUrl);
+                                            Glide.with(MainActivity.this)
+                                                    .load(imageUrl)
+                                                    .into(imageView);
+                                            //imageView.setImageURI(imageUrl);
                                         }
                                     }
                                 });
@@ -1094,7 +1358,7 @@ public class MainActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient(); // 创建 OkHttp 客户端
         Request request = new Request.Builder()
                 .url("https://api.github.com/repos/SRInternet/Wallpaper-generator-for-Android/releases") // 替换成你的仓库信息
-                .addHeader("Authorization", "token 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") // 添加 Authorization 标头
+                .addHeader(getString(R.string.GitHeaderName), getString(R.string.GitPassport)) // 添加 Authorization 标头
                 .build();
 
         client.newCall(request).enqueue(new Callback() { // 异步发送 HTTP 请求
@@ -1223,6 +1487,23 @@ public class MainActivity extends AppCompatActivity {
                 Looper.loop(); // 添加此行
             }
         });
+    }
+
+    public boolean IsRewardShowed(String reward_name){
+        SharedPreferences sharedPreferences1 = getSharedPreferences("Showed_rewards", Context.MODE_PRIVATE);
+        String if_get = sharedPreferences1.getString(reward_name, "False");
+
+        boolean boolValue = Boolean.parseBoolean(if_get);
+
+        return boolValue;
+    }
+
+    public void RewardShowed(String reward_name){
+        SharedPreferences sharedPreferences1 = getSharedPreferences("Showed_rewards", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences1.edit();
+        editor.putString(reward_name, "True");
+        editor.apply();
     }
 
     public void compareVersions(String latestVersion, String Text, String html_url, String browserDownloadUrl) {

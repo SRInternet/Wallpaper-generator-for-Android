@@ -4,10 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sign_background_blurring"
     tools:context="com.wallpaper.signin.SignInActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="15dp">
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/put_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="320dp"
+        android:layout_height="62dp"
+        android:layout_marginBottom="18dp"
+        android:text="立即签到"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone" />
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -17,6 +40,7 @@
         tools:visibility="visible">
 
         <ScrollView
+            android:id="@+id/scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"
@@ -37,12 +61,21 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/imageView"
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="234dp"
-                            android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/top_background" />
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="1dp">
+
+                            <ImageView
+                                android:id="@+id/imageView"
+                                android:layout_width="match_parent"
+                                android:layout_height="234dp"
+                                android:background="@drawable/rounded_corner_bg"
+                                android:scaleType="centerCrop"
+                                app:srcCompat="@drawable/find1" />
+                        </androidx.cardview.widget.CardView>
+
 
                     </LinearLayout>
 
@@ -59,9 +92,9 @@
                             android:shadowColor="#80000000"
                             android:shadowDx="5"
                             android:shadowDy="5"
-                            android:shadowRadius="15"
-                            android:text="中秋签到 领福利"
-                            android:textColor="#FFC107"
+                            android:shadowRadius="10"
+                            android:text="“双诞” 狂欢盛典"
+                            android:textColor="	#FF6A6A"
                             android:textSize="48sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -87,6 +120,38 @@
 
                     <TextView
                         android:id="@+id/textView2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="连续登陆任务"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content" />
+
+
+                    <TextView
+                        android:id="@+id/textView19"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -159,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:src="@drawable/third_day"/>
+                        android:src="@drawable/third_day" />
 
                 </LinearLayout>
 
@@ -168,22 +233,18 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content" />
-
 
                     <TextView
                         android:id="@+id/textView5"
-                        android:layout_width="0dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0"
                         android:gravity="start"
                         android:shadowColor="#80000000"
                         android:shadowDx="5"
                         android:shadowDy="5"
                         android:shadowRadius="10"
-                        android:text="みはりse图"
+                        android:text="【刚睡醒】勋章"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -197,7 +258,7 @@
                         android:shadowDx="5"
                         android:shadowDy="5"
                         android:shadowRadius="10"
-                        android:text="中秋限定 x 1"
+                        android:text="美图 x 1"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -211,7 +272,7 @@
                         android:shadowDx="5"
                         android:shadowDy="5"
                         android:shadowRadius="10"
-                        android:text="中秋限定 x 1"
+                        android:text="圣诞限定礼包"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
@@ -227,17 +288,12 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
-                    <View
-                        android:id="@+id/view5"
-                        android:layout_width="30dp"
-                        android:layout_height="0dp" />
-
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="start"
+                        android:gravity="center"
                         android:shadowColor="#80000000"
                         android:shadowDx="5"
                         android:shadowDy="5"
@@ -248,7 +304,7 @@
 
                     <TextView
                         android:id="@+id/textView9"
-                        android:layout_width="0dp"
+                        android:layout_width="71dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -260,24 +316,6 @@
                         android:textColor="#FFFFFF"
                         android:textSize="24sp" />
 
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:shadowColor="#80000000"
-                        android:shadowDx="5"
-                        android:shadowDy="5"
-                        android:shadowRadius="10"
-                        android:text="第 6 天"
-                        android:textColor="#FFFFFF"
-                        android:textSize="24sp" />
-
-                    <View
-                        android:id="@+id/view2"
-                        android:layout_width="30dp"
-                        android:layout_height="0dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -288,25 +326,18 @@
 
                     <ImageView
                         android:id="@+id/imageView5"
-                        android:layout_width="0dp"
+                        android:layout_width="20dp"
                         android:layout_height="91dp"
                         android:layout_weight="1"
-                        android:gravity="start" />
+                        android:gravity="start"
+                        android:src="@drawable/shoot"/>
 
                     <ImageView
                         android:id="@+id/imageView6"
-                        android:layout_width="0dp"
+                        android:layout_width="75dp"
                         android:layout_height="91dp"
                         android:layout_weight="1"
                         android:gravity="center" />
-
-                    <ImageView
-                        android:id="@+id/imageView7"
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:src="@drawable/sign_background"/>
 
                 </LinearLayout>
 
@@ -322,7 +353,7 @@
 
                     <TextView
                         android:id="@+id/textView11"
-                        android:layout_width="0dp"
+                        android:layout_width="25dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="start"
@@ -330,13 +361,13 @@
                         android:shadowDx="5"
                         android:shadowDy="5"
                         android:shadowRadius="10"
-                        android:text="中秋限定 x 2"
+                        android:text="【坚持到底】勋章"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/textView12"
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -344,24 +375,9 @@
                         android:shadowDx="5"
                         android:shadowDy="5"
                         android:shadowRadius="10"
-                        android:text="中秋限定 x 3"
+                        android:text="大图集 x 100"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/textView13"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:shadowColor="#80000000"
-                        android:shadowDx="5"
-                        android:shadowDy="5"
-                        android:shadowRadius="10"
-                        android:text="解锁 “银发”"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
 
                     <View
                         android:layout_width="30dp"
@@ -385,15 +401,17 @@
                         android:id="@+id/textView14"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:shadowColor="#80000000"
                         android:shadowDx="5"
                         android:shadowDy="5"
                         android:shadowRadius="10"
-                        android:text="第 7 天"
+                        android:text="阶段性任务"
                         android:textColor="#FFFFFF"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
                     <View
                         android:id="@+id/view6"
@@ -409,8 +427,273 @@
 
                     <ImageView
                         android:id="@+id/imageView8"
-                        android:layout_width="0dp"
+                        android:layout_width="180dp"
                         android:layout_height="100dp"
+                        android:layout_weight="0"
+                        android:gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="【初阶二次元】"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp" />
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="累计生成5张壁纸"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="180dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="0"
+                        android:gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView20"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="【萝莉控！】"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp" />
+
+                        <TextView
+                            android:id="@+id/textView21"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="累计生成20张壁纸"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        android:layout_width="180dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="0"
+                        android:gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView22"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="【一定有其他目的】"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp" />
+
+                        <TextView
+                            android:id="@+id/textView23"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="累计生成50张壁纸"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView11"
+                        android:layout_width="180dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="0"
+                        android:gravity="start"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView24"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="【大好きです！】"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:id="@+id/textView25"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="累计生成100张壁纸"
+                            android:textColor="#FFFFFF"
+                            android:textSize="19sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view7"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+
+                    <TextView
+                        android:id="@+id/textView26"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="特别の任务"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:id="@+id/view8"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view9"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+
+                    <TextView
+                        android:id="@+id/textView27"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="【大航海！】"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp" />
+
+                    <View
+                        android:id="@+id/view10"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView12"
+                        android:layout_width="0dp"
+                        android:layout_height="91dp"
                         android:layout_weight="1"
                         android:gravity="start" />
 
@@ -427,8 +710,8 @@
 
 
                     <TextView
-                        android:id="@+id/textView15"
-                        android:layout_width="356dp"
+                        android:id="@+id/textView28"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -436,11 +719,9 @@
                         android:shadowDx="5"
                         android:shadowDy="5"
                         android:shadowRadius="10"
-                        android:text="壁纸大礼包 (电脑+随机+真寻壁纸 共377张)"
-                        android:textAllCaps="false"
+                        android:text="从软件内直接设置壁纸累计 5 次"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp" />
 
                     <View
                         android:layout_width="30dp"
@@ -451,19 +732,319 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="84dp"
-                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/button"
-                        android:layout_width="320dp"
-                        android:layout_height="62dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="立即签到"
-                        android:textSize="18sp"
+                    <View
+                        android:id="@+id/view11"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+
+                    <TextView
+                        android:id="@+id/textView29"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="【我还很纯洁呢~】"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp" />
+
+                    <View
+                        android:id="@+id/view12"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView13"
+                        android:layout_width="0dp"
+                        android:layout_height="91dp"
+                        android:layout_weight="1"
+                        android:gravity="start" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content" />
+
+
+                    <TextView
+                        android:id="@+id/textView30"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="使用新的 无涩图 模式累计生成 25 张壁纸"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="30dp"
+
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view13"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+
+                    <TextView
+                        android:id="@+id/textView31"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="【白毛什么的我最喜欢啦】"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp" />
+
+                    <View
+                        android:id="@+id/view14"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView14"
+                        android:layout_width="0dp"
+                        android:layout_height="91dp"
+                        android:layout_weight="1"
+                        android:gravity="start" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/textView32"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="使用 银发 模式累计生成 50 张壁纸"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view15"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+
+                    <TextView
+                        android:id="@+id/textView33"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="兑换 最终大奖！"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
+
+                    <View
+                        android:id="@+id/view16"
+                        android:layout_width="30dp"
+                        android:layout_height="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView15"
+                        android:layout_width="250dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="10dp"
+                        android:gravity="start"
+                        android:visibility="visible"
+                        tools:visibility="visible"
+                       />
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="45dp"
+                        android:layout_height="74dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="彩蛋图集↑"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:visibility="gone"
+                        tools:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView34"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="超大图集"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/textView35"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="立即兑换"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold|normal"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView16"
+                        android:layout_width="250dp"
+                        android:layout_height="100dp"
+                        android:gravity="start"
+                        android:visibility="visible"
+                        tools:visibility="visible"
+                        />
+
+                    <TextView
+                        android:id="@+id/textView36"
+                        android:layout_width="233dp"
+                        android:layout_height="74dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:shadowColor="#80000000"
+                        android:shadowDx="5"
+                        android:shadowDy="5"
+                        android:shadowRadius="10"
+                        android:text="？ ？ ？"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:visibility="gone"
+                        tools:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView37"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="Pixiv 生成器"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/textView38"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="5"
+                            android:shadowDy="5"
+                            android:shadowRadius="10"
+                            android:text="立即兑换"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold|normal"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -478,7 +1059,7 @@
 
         <TextView
             android:id="@+id/textView16"
-            android:layout_width="298dp"
+            android:layout_width="258dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent_white"
             android:text="  &lt; 返回"

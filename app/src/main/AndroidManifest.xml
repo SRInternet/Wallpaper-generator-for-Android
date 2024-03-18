@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission-group.STORAGE" />
 
     <application
@@ -17,21 +17,27 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wallpaper_generator"
         tools:targetApi="31">
+
+        <activity
+            android:name="com.wallpaper.generator.PixivGeneratorActivity"
+            android:exported="false"
+            android:label="Pixiv 生成器"
+            android:theme="@style/Theme.Pixiv_generator"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.wallpaper.signin.SignInActivity"
             android:exported="false"
-            android:label="2023中秋国庆 特别活动"
-            android:theme="@style/Theme.Wallpaper_generator" />
-
-<!--        <meta-data-->
-<!--            android:name="com.google.android.actions"-->
-<!--            android:resource="@xml/Sign_in" />-->
-
+            android:label="2023-2024 ”双诞”特别活动"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Wallpaper_generator" /> <!-- <meta-data -->
+        <!-- android:name="com.google.android.actions" -->
+        <!-- android:resource="@xml/Sign_in" /> -->
         <activity
             android:name="com.wallpaper.generator.MainActivity"
             android:exported="true"

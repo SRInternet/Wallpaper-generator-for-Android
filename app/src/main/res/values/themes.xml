@@ -7,6 +7,15 @@
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
     </style>
-
     <style name="Theme.Wallpaper_generator" parent="Base.Theme.Wallpaper_generator" />
+
+    <style name="Base.Theme.Pixiv_generator" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#0082fc</item>
+        <item name="colorPrimaryDark">#00BCD4</item>
+        <item name="colorAccent">#0082fc</item>
+    </style>
+    <style name="Theme.Pixiv_generator" parent="Base.Theme.Pixiv_generator" />
+
 </resources>
