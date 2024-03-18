@@ -8,8 +8,8 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
-/debug
-/release
+app/release
+app/debug
 app/src/main/res/values/passwords.xml
 /captures
 .externalNativeBuild
