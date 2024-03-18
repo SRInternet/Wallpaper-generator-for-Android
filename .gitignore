@@ -6,8 +6,11 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-app/src/main/res/values/passwords.xml
 .DS_Store
+/build
+/debug
+/release
+app/src/main/res/values/passwords.xml
 /captures
 .externalNativeBuild
 .cxx
