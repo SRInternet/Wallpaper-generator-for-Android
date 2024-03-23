@@ -29,6 +29,7 @@ import com.android.application.R;
 
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Objects;
 
 import android.content.SharedPreferences;
@@ -38,6 +39,11 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+
+import com.microsoft.clarity.Clarity;
+import com.microsoft.clarity.ClarityConfig;
+import com.microsoft.clarity.models.ApplicationFramework;
+import com.microsoft.clarity.models.LogLevel;
 
 public class SignInActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1001;
@@ -49,6 +55,22 @@ public class SignInActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in_layout);
+
+        ClarityConfig config = new ClarityConfig(
+                "ll338ghnij",
+                null, // Default user id
+                LogLevel.None,
+                false, // Disallow metered network usage
+                true, // Enable web view capturing
+                Collections.singletonList("*"), // Allowed domains
+                ApplicationFramework.Native,
+                Collections.emptyList(), // Allowed activities
+                Collections.emptyList(), // Disallowed activities (ignore activities)
+                false, // Disable on low-end devices
+                null
+        );
+
+        Clarity.initialize(getApplicationContext(), config);
 
         Intent intent = getIntent();
         String IsFirst = intent.getStringExtra("IsFirst");

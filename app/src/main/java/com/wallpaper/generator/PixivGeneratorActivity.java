@@ -81,6 +81,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -89,8 +90,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PixivGeneratorActivity extends AppCompatActivity {
+import com.microsoft.clarity.Clarity;
+import com.microsoft.clarity.ClarityConfig;
+import com.microsoft.clarity.models.ApplicationFramework;
+import com.microsoft.clarity.models.LogLevel;
 
+public class PixivGeneratorActivity extends AppCompatActivity {
+    // 重要注释：代码中部分敏感字符串存储的xml文件未推送至存储库，请注意处理所有报错的地方
+    // proxy：私有Pixiv反代服务器；cid：Microsoft Clarity 项目ID
     private Boolean NavigationShowed = false ;
     private static final int PERMISSION_REQUEST_CODE = 1001;
     private ActivityResultLauncher<String> requestPermissionLauncher;
@@ -115,7 +122,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.pixiv_generator_layout);
+        setContentView(R.layout.activity_main);
 
         Button button1 = findViewById(R.id.button2);
         Button button2 = findViewById(R.id.toggleButton);
@@ -136,6 +143,22 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                 // 权限被拒绝，可以根据需要处理
             }
         });
+
+        ClarityConfig config = new ClarityConfig(
+                "kz3hptw1lp",
+                "", // Default user id (using empty string)
+                LogLevel.None,
+                false, // Disallow metered network usage
+                true, // Enable web view capturing
+                Collections.singletonList("*"), // Allowed domains
+                ApplicationFramework.Native,
+                Collections.emptyList(), // Allowed activities
+                Collections.emptyList(), // Disallowed activities (ignore activities)
+                false, // Disable on low-end devices
+                null
+        );
+
+        Clarity.initialize(getApplicationContext(), config);
 
         textModel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -807,7 +830,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
                                 String information = "作品PID：" + Pid + "\n作者UID：" + Uid + "\n作品标题：" + Title + "\n作者昵称：" + Author + "\n画幅（宽）" + Width + "\n画幅（高）" + Height + "\n作品文件类型：" + Ext + "\n上载时间：" + UpDate;
                                 JSONObject urlsObject = item.getJSONObject("urls");
-                                String originalUrl = urlsObject.getString("original").replace("i.pixiv.re", "pixiv.t.srinternet.top");
+                                String originalUrl = urlsObject.getString("original").replace("i.pixiv.re", getResources().getString(R.string.proxy));
 
 //String originalUrl = dataObject.getJSONObject("urls").getString("original").replace("i.pixiv.re", "pixiv.t.srinternet.top");
 

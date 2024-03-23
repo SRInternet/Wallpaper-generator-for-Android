@@ -103,10 +103,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+
+import com.microsoft.clarity.Clarity;
+import com.microsoft.clarity.ClarityConfig;
+import com.microsoft.clarity.models.ApplicationFramework;
+import com.microsoft.clarity.models.LogLevel;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -149,6 +155,21 @@ public class MainActivity extends AppCompatActivity {
         downloadButton = findViewById(R.id.download_button);
         imageView = findViewById(R.id.image_view);
 
+        ClarityConfig config = new ClarityConfig(
+                "ll338ghnij",
+                null, // Default user id
+                LogLevel.None,
+                false, // Disallow metered network usage
+                true, // Enable web view capturing
+                Collections.singletonList("*"), // Allowed domains
+                ApplicationFramework.Native,
+                Collections.emptyList(), // Allowed activities
+                Collections.emptyList(), // Disallowed activities (ignore activities)
+                false, // Disable on low-end devices
+                null
+        );
+
+        Clarity.initialize(getApplicationContext(), config);
 
         /*setContentView(R.layout.activity_main);*/
 
