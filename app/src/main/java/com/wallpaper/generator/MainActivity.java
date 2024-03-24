@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
 
         ClarityConfig config = new ClarityConfig(
-                "ll338ghnij",
+                getString(R.string.cid),
                 null, // Default user id
                 LogLevel.None,
                 false, // Disallow metered network usage

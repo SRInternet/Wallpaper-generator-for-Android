@@ -122,7 +122,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.pixiv_generator_layout);
 
         Button button1 = findViewById(R.id.button2);
         Button button2 = findViewById(R.id.toggleButton);
@@ -145,7 +145,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
         });
 
         ClarityConfig config = new ClarityConfig(
-                "kz3hptw1lp",
+                getString(R.string.cid),
                 "", // Default user id (using empty string)
                 LogLevel.None,
                 false, // Disallow metered network usage
