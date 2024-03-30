@@ -1,13 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Wallpaper_generator" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Base.Theme.Sign_Activity" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
     </style>
-    <style name="Theme.Wallpaper_generator" parent="Base.Theme.Wallpaper_generator" />
+    <style name="Theme.Sign_Activity" parent="Base.Theme.Sign_Activity" />
 
     <style name="Base.Theme.Pixiv_generator" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your light theme here. -->
@@ -17,4 +17,14 @@
         <item name="colorAccent">#0082fc</item>
     </style>
     <style name="Theme.Pixiv_generator" parent="Base.Theme.Pixiv_generator" />
+
+    <style name="Base.Theme.Wallpaper_generator" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#8150EF</item>
+        <item name="colorPrimaryDark">#673AB7</item>
+        <item name="colorAccent">#3D5AFE</item>
+    </style>
+    <style name="Theme.Wallpaper_generator" parent="Base.Theme.Wallpaper_generator" />
+
 </resources>

@@ -3,6 +3,7 @@
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
     <string name="title_activity_sign_in">Sign_in_activity</string>
+    <string name="ProviderS">com.wallpaper.generator.fileprovider</string>
     <string-array name="options_array">
         <item>1</item>
         <item>2</item>

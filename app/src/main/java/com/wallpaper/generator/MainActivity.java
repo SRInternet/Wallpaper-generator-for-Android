@@ -353,6 +353,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ImageView Event_Img = findViewById(R.id.imageView9);
+        Glide.with(this)
+                .load(R.drawable.find2)
+                .into(Event_Img);
         Event_Img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -470,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
                 String savedImageURL3 = null;
 
 
-                if (Objects.equals(reward_name, "圣诞限定礼包")) {
+                if (Objects.equals(reward_name, "五周年限定礼包")) {
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.third_day);
                     savedImageURL2 = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, reward_name, reward_name);
                     Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.third_day1);
@@ -614,7 +617,7 @@ public class MainActivity extends AppCompatActivity {
                     PERMISSION_REQUEST_CODE);
         }
         builder.setTitle("关于本程序")
-                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：" + Version + "\n内部版本：3.1 New Year of 2024 \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：MirlKoi API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android（已停止开源）\n\n感谢您的使用！")
+                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：" + Version + "\n内部版本：3.1 The Special 5 anniversary \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：MirlKoi-API Lolicon-API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android\n\n感谢您的使用！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

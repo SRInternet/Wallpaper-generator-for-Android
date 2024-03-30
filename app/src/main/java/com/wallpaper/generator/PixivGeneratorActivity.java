@@ -1088,7 +1088,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                     try {
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
                         shareIntent.setType("image/*");
-                        Uri imageUri = FileProvider.getUriForFile(PixivGeneratorActivity.this, "com.pixiv.srinternet.fileprovider", saveBitmapToFile(drawableToBitmap(NormalImage.getDrawable())));
+                        Uri imageUri = FileProvider.getUriForFile(PixivGeneratorActivity.this, getString(R.string.ProviderS), saveBitmapToFile(drawableToBitmap(NormalImage.getDrawable())));
                         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
                         startActivity(Intent.createChooser(shareIntent, "分享 Pixiv 图片"));
                     } catch (Exception e) {

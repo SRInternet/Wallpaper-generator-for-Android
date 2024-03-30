@@ -13,7 +13,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 33
         versionCode 3
-        versionName "3.1-New Yaer of 2024"
+        versionName "3.1-The Special 5 anniversary"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 

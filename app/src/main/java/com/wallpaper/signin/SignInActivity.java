@@ -57,7 +57,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.sign_in_layout);
 
         ClarityConfig config = new ClarityConfig(
-                "ll338ghnij",
+                getString(R.string.cid),
                 null, // Default user id
                 LogLevel.None,
                 false, // Disallow metered network usage
@@ -91,9 +91,9 @@ public class SignInActivity extends AppCompatActivity {
         ImageView th_img11 = findViewById(R.id.imageView13);
         ImageView th_img12 = findViewById(R.id.imageView14);
         ImageView img13 = findViewById(R.id.imageView15);
-        ImageView img14 = findViewById(R.id.imageView16);
+        ImageView img14 = findViewById(R.id.background_image);
 
-        int image = R.drawable.find1;
+        int image = R.drawable.find2;
         int image1 = R.drawable.first_day;
         int image2 = R.drawable.second_day;
         int image3 = R.drawable.third_day;
@@ -107,11 +107,11 @@ public class SignInActivity extends AppCompatActivity {
         int image11 = R.drawable.pcsucaii;
         int image12 = R.drawable.whitehair;
         int image13 = R.drawable.last;
-        int image14 = R.drawable.pixivb;
+        int image14 = R.drawable.put_background;
 
-//        Glide.with(this)
-//                .load(image)
-//                .into(title_img);
+        Glide.with(this)
+                .load(image)
+                .into(title_img);
 
         Glide.with(this)
                 .load(image1)
@@ -338,9 +338,9 @@ public class SignInActivity extends AppCompatActivity {
 //                    builder.setCancelable(false); // 禁止点击对话框外部取消对话框
 //                    AlertDialog dialog = builder.create();
 //                    dialog.show();
-                    reward_show("圣诞限定礼包", Boolean.TRUE, R.drawable.onlychirstmas);
+                    reward_show("五周年限定礼包", Boolean.TRUE, R.drawable.onlychirstmas);
                 } else {
-                    reward_show("圣诞限定礼包", Boolean.FALSE, R.drawable.onlychirstmas);
+                    reward_show("五周年限定礼包", Boolean.FALSE, R.drawable.onlychirstmas);
                 }
 
 
@@ -600,18 +600,8 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        img14.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                reward_show("浏览 Pixiv", null, image14);
-
-
-            }
-        });
 
         TextView tuji = findViewById(R.id.textView35);
-        TextView liulan = findViewById(R.id.textView38);
 
         tuji.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1017,7 +1007,7 @@ public class SignInActivity extends AppCompatActivity {
                 String savedImageURL2 = null;
                 String savedImageURL3 = null;
 
-                if (reward_name == "圣诞限定礼包") {
+                if (reward_name == "五周年限定礼包") {
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.third_day);
                     savedImageURL2 = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, reward_name, reward_name);
                     Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.third_day1);
@@ -1096,8 +1086,8 @@ public class SignInActivity extends AppCompatActivity {
 //        } else if (rewarded_date == 3) {
 //            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.third_day);
 //
-//            String title = "圣诞限定";
-//            String description = "圣诞限定";
+//            String title = "五周年限定";
+//            String description = "五周年限定";
 //            String savedImageURL = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, title, description);
 //
 //            if (savedImageURL != null) {
@@ -1185,7 +1175,7 @@ public class SignInActivity extends AppCompatActivity {
 //            }
 //
             Synchronous();
-            reward_show("圣诞限定礼包", Boolean.TRUE, R.drawable.onlychirstmas);
+            reward_show("五周年限定礼包", Boolean.TRUE, R.drawable.onlychirstmas);
 
 
         } else if (CompletedDate_1 == 4) {

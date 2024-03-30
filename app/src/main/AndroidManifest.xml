@@ -33,9 +33,9 @@
         <activity
             android:name="com.wallpaper.signin.SignInActivity"
             android:exported="false"
-            android:label="2023-2024 ”双诞”特别活动"
+            android:label="五周年福利大放送"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Wallpaper_generator" /> <!-- <meta-data -->
+            android:theme="@style/Theme.Sign_Activity" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/Sign_in" /> -->
         <activity

@@ -168,6 +168,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
+                                                <entry key="imagePath" value="C:\Users\16936\Downloads\900px-Pixiv_Icon.svg.png" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -202,7 +203,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
+                                      <entry key="imageAsset" value="C:\Users\16936\Downloads\900px-Pixiv_Icon.svg.png" />
                                       <entry key="outputName" value="ic_pixiv" />
                                     </map>
                                   </option>
