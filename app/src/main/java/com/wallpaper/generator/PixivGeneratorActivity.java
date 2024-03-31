@@ -1127,7 +1127,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
 
         builder.setTitle("关于本程序")
-                .setMessage("程序名称：Pixiv 生成器（壁纸生成器 系列插件）\n内部名称：Pixiv_of_Wallpaper_Generator\n版本：1.0 (壁纸生成器 3.1)\n内部版本：1.0 (of 3.1.New_Year_of_2024) \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：Lolicon API\n代理：SRInternet 内置Pixiv代理\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android（已停止开源）\n\n感谢您的使用！")
+                .setMessage("程序名称：Pixiv 生成器（壁纸生成器 系列插件）\n内部名称：Pixiv_of_Wallpaper_Generator\n版本：1.0 (壁纸生成器 3.1)\n内部版本：1.0 (of 3.1-The Special 5 anniversary) \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：Lolicon API\n代理：SRInternet 内置Pixiv代理\n开源与更新：https://github.com/SRInternet/Pixiv-generator\n\n感谢您的使用！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

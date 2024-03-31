@@ -4,6 +4,20 @@
     <string name="navigation_drawer_close">Close</string>
     <string name="title_activity_sign_in">Sign_in_activity</string>
     <string name="ProviderS">com.wallpaper.generator.fileprovider</string>
+    <string name="welcomeTitle">欢度 思锐工作室 五周年！🥳</string>
+    <string name="welcome">
+        \n
+        超级五周年福利大放送，更多精美图片和勋章等你解锁！😆\n
+        全新对接 Pixiv 接口，更多丰富精美的壁纸和美图等你浏览！🎉\n
+        更流畅的体验，更便捷的操作，还有更多惊喜等你探索！🎈\n
+        \n
+        若有任何问题，请及时反馈：\n
+        邮箱：srinternet@qq.com 或 B站搜：SR思锐Official\n
+        欢迎加入QQ群 367798007 或 895857556 与我们交流！\n
+        \n
+         *此公告只显示一次，请认真阅读。*\n
+        感谢您的使用，您的使用是对我们最大的鼓励！
+    </string>
     <string-array name="options_array">
         <item>1</item>
         <item>2</item>

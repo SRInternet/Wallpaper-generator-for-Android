@@ -565,15 +565,15 @@ public class MainActivity extends AppCompatActivity {
                     PERMISSION_REQUEST_CODE);
             System.out.println("No Permission！");
         }
-        builder.setTitle("欢庆《壁纸生成器》一周年！")
-                .setMessage("欢迎使用 壁纸生成器 " + Version + " ！\n全新的《”双诞“特别活动》活动已经全面启动，活动无限期！\n超多特别勋章等你解锁，还有超级大图集！\n还在犹豫什么，快点体验吧！\n\n若有任何问题，请及时反馈，邮箱：srinternet@qq.com\n欢迎加入QQ群 367798007 与我们交流！\n\n *此消息只显示一次，请认真阅读。*")
+        builder.setTitle(getString(R.string.welcomeTitle))
+                .setMessage("欢迎使用 壁纸生成器 " + Version + " ！" + getString(R.string.welcome))
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 点击确定按钮后的操作
-                        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                        intent.putExtra("IsFirst", "true");
-                        startActivity(intent);
+//                        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+//                        intent.putExtra("IsFirst", "true");
+//                        startActivity(intent);
                     }
                 })
                 .setCancelable(false); // 不可取消对话框
