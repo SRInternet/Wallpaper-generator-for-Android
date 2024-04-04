@@ -1,19 +1,13 @@
 package com.wallpaper.generator;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.WallpaperManager;
 import android.content.ContentResolver;
@@ -24,10 +18,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -46,7 +40,6 @@ import android.view.animation.TranslateAnimation;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -58,17 +51,12 @@ import android.widget.Toast;
 
 import com.android.application.R;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,14 +65,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -101,6 +86,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
     private Boolean NavigationShowed = false ;
     private static final int PERMISSION_REQUEST_CODE = 1001;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    private long backButtonPressedTime = 0;
 
     private List<Drawable> drawables = new ArrayList<>();
 
@@ -123,6 +109,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.pixiv_generator_layout);
+
 
         Button button1 = findViewById(R.id.button2);
         Button button2 = findViewById(R.id.toggleButton);
@@ -159,6 +146,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
         );
 
         Clarity.initialize(getApplicationContext(), config);
+
 
         textModel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -324,15 +312,27 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                 } catch (Exception e){
                     e.printStackTrace();
                     AlertDialog.Builder builder = new AlertDialog.Builder(PixivGeneratorActivity.this);
-                    builder.setTitle("图片展示失败")
-                            .setMessage("无法读取当前图片，可能是由于图片没有正常显示。请前往相册查看，或重新生成图片。我们建议您一次性不要生成太多张图片，以缓解内存压力。\n详细信息：\n\n" + e.toString())
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // 点击确定按钮后的操作
-                                }
-                            })
-                            .setCancelable(false); // 不可取消对话框
+                    if (drawables.isEmpty()) {
+                        builder.setTitle("没有生成图片")
+                                .setMessage("请先生成图片哦o((>ω< ))o")
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // 点击确定按钮后的操作
+                                    }
+                                })
+                                .setCancelable(false); // 不可取消对话框
+                    } else {
+                        builder.setTitle("图片展示失败")
+                                .setMessage("无法读取当前图片，可能是由于图片没有正常显示。请前往相册查看，或重新生成图片。\n详细信息：\n\n" + e.toString())
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // 点击确定按钮后的操作
+                                    }
+                                })
+                                .setCancelable(false); // 不可取消对话框
+                    }
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
@@ -809,6 +809,8 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                             informations.clear();
                             TextView ProgressText = findViewById(R.id.ProgressText);
                             List<String> originalUrls = new ArrayList<>();
+                            Integer loss = dataArray.length();
+                            Integer total = dataArray.length();
                             for (int i = 0; i < dataArray.length(); i++) {
 
                                 int finalI = i;
@@ -859,8 +861,11 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                                         // 将输入流转换为 Drawable
                                         System.out.println("载入133");
                                         drawable_image = Drawable.createFromStream(inputStream, "image_name");
-                                        drawables.add(drawable_image);
-                                        saveImageToGallery(PixivGeneratorActivity.this, drawable_image, Title + "." + Ext);
+                                        Drawable returned = saveImageToGallery(PixivGeneratorActivity.this, drawable_image, Title + "." + Ext);
+                                        drawables.add(returned);
+                                        if (returned == null) {
+                                            loss -= 1;
+                                        }
                                         informations.add(information);
                                         // 将获取的 Drawable 对象应用到你的视图或者其他逻辑中
                                         System.out.println("载入14111");
@@ -873,23 +878,20 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                                     connection.disconnect();
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(PixivGeneratorActivity.this);
-                                            builder.setTitle("已浏览，但是无法载入")
-                                                    .setMessage(e.getMessage() + "\n\n 请截图并反馈。")
-                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            // 点击确定按钮后的操作
-                                                        }
-                                                    })
-                                                    .setCancelable(false); // 不可取消对话框
+                                    runOnUiThread(() -> {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(PixivGeneratorActivity.this);
+                                        builder.setTitle("已浏览，但是无法载入")
+                                                .setMessage(e.getMessage() + "\n\n 请截图并反馈。")
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // 点击确定按钮后的操作
+                                                    }
+                                                })
+                                                .setCancelable(false); // 不可取消对话框
 
-                                            AlertDialog dialog = builder.create();
-                                            dialog.show();
-                                        }
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
                                     });
                                 }
 
@@ -897,6 +899,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                                 originalUrls.add(originalUrl);
                             }
 
+                            Integer finalLoss = loss;
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -911,6 +914,23 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 //                                                .into(yourImageView);
                                         yourImageView.invalidate();
                                     }
+
+                                    if (finalLoss < total) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(PixivGeneratorActivity.this);
+                                        builder.setTitle("有 " + (total - finalLoss)+" 张图片无法获取")
+                                                .setMessage("这可能是 Pixiv 在保存图片的过程中拒绝了你的访问，也有可能是因为网络环境造成了丢包。减少批量生成的数量或更换网络可能可以缓解这种情况。\n\n成功生成了 " + finalLoss + " 张图片。")
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // 点击确定按钮后的操作
+                                                    }
+                                                })
+                                                .setCancelable(false); // 不可取消对话框
+
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }
+
                                 }
                             });
 
@@ -1042,73 +1062,90 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
         } else {
 
+            if (drawables.get(ImagePosition) != null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PixivGeneratorActivity.this);
+                LayoutInflater inflater = getLayoutInflater();
+                View customView = inflater.inflate(R.layout.pixiv_settings, null);
+                builder.setView(customView);
+
+                ImageView NormalImage = findViewById(R.id.image_view);
+                Button button = findViewById(R.id.download_button2);
+                Button button1 = customView.findViewById(R.id.button_negative2);
+                Button button2 = customView.findViewById(R.id.button_negative);
+                Button button3 = customView.findViewById(R.id.button_negative3);
+                TextView dialog_title = customView.findViewById(R.id.dialog_title);
+                ImageView imageView_inside = customView.findViewById(R.id.imageView10);
+                TextView dialog_message = customView.findViewById(R.id.dialog_message2);
+
+                Glide.with(this)
+                        .load(drawables.get(ImagePosition))
+                        .into(imageView_inside);
+
+                dialog_message.setText(button.getText());
 
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(PixivGeneratorActivity.this);
-            LayoutInflater inflater = getLayoutInflater();
-            View customView = inflater.inflate(R.layout.pixiv_settings, null);
-            builder.setView(customView);
+                button1.setEnabled(true);
+                AlertDialog dialog = builder.create();
 
-            ImageView NormalImage = findViewById(R.id.image_view);
-            Button button = findViewById(R.id.download_button2);
-            Button button1 = customView.findViewById(R.id.button_negative2);
-            Button button2 = customView.findViewById(R.id.button_negative);
-            Button button3 = customView.findViewById(R.id.button_negative3);
-            TextView dialog_title = customView.findViewById(R.id.dialog_title);
-            ImageView imageView_inside = customView.findViewById(R.id.imageView10);
-            TextView dialog_message = customView.findViewById(R.id.dialog_message2);
-
-            Glide.with(this)
-                    .load(drawables.get(ImagePosition))
-                    .into(imageView_inside);
-
-            dialog_message.setText(button.getText());
-
-
-            button1.setEnabled(true);
-            AlertDialog dialog = builder.create();
-
-            button2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Button 1 的点击事件逻辑
-                    if (setWallpaperFromImageView()) {
-                        Toast toast = Toast.makeText(PixivGeneratorActivity.this, "已成功设置壁纸", Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else {
-                        Toast toast = Toast.makeText(PixivGeneratorActivity.this, "设置当前壁纸失败", Toast.LENGTH_SHORT);
-                        toast.show();
+                button2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Button 1 的点击事件逻辑
+                        if (setWallpaperFromImageView()) {
+                            Toast toast = Toast.makeText(PixivGeneratorActivity.this, "已成功设置壁纸", Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else {
+                            Toast toast = Toast.makeText(PixivGeneratorActivity.this, "设置当前壁纸失败", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
                     }
-                }
-            });
+                });
 
-            button3.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.setType("image/*");
-                        Uri imageUri = FileProvider.getUriForFile(PixivGeneratorActivity.this, getString(R.string.ProviderS), saveBitmapToFile(drawableToBitmap(NormalImage.getDrawable())));
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-                        startActivity(Intent.createChooser(shareIntent, "分享 Pixiv 图片"));
-                    } catch (Exception e) {
-                        Toast toast = Toast.makeText(PixivGeneratorActivity.this, "无法分享当前图片", Toast.LENGTH_SHORT);
-                        toast.show();
+                button3.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.setType("image/*");
+                            Uri imageUri = FileProvider.getUriForFile(PixivGeneratorActivity.this, getString(R.string.ProviderS), saveBitmapToFile(drawableToBitmap(NormalImage.getDrawable())));
+                            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                            startActivity(Intent.createChooser(shareIntent, "分享 Pixiv 图片"));
+                        } catch (Exception e) {
+                            Toast toast = Toast.makeText(PixivGeneratorActivity.this, "无法分享当前图片", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+
                     }
+                });
 
-                }
-            });
+                dialog.show();
 
-            dialog.show();
+                button1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Button 2 的点击事件逻辑
+                        // 在这里写下你希望 Button 2 点击后执行的代码
+                        dialog.dismiss();
+                    }
+                });
+            } else {
+                AlertDialog.Builder builde = new AlertDialog.Builder(PixivGeneratorActivity.this);
 
-            button1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Button 2 的点击事件逻辑
-                    // 在这里写下你希望 Button 2 点击后执行的代码
-                    dialog.dismiss();
-                }
-            });
+                builde.setTitle("不被允许的图片")
+                        .setMessage("因为图片缓存已被清除。请前往相册查看。")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击确定按钮后的操作b
+                            }
+                        })
+                        .setCancelable(false); // 不可取消对话框
+
+                AlertDialog dialog = builde.create();
+                dialog.show();
+            }
+
+
         }
 
 
@@ -1211,6 +1248,21 @@ public class PixivGeneratorActivity extends AppCompatActivity {
             }
         }
     }
+//    @Override
+//    public void onBackPressed() {
+//        // 按下返回键时的时间戳
+//        long currentTime = System.currentTimeMillis();
+//
+//        // 判断时间间隔是否小于2秒
+//        if (currentTime - backButtonPressedTime < 2000) {
+//            super.onBackPressed(); // 执行默认的返回键操作，退出应用程序
+//            finish();
+//            System.exit(0);
+//        } else {
+//            backButtonPressedTime = currentTime; // 更新按下返回键的时间戳
+//            Toast.makeText(this, "再按一次返回键退出", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     // 将Drawable对象转换为Bitmap对象的方法
     private Bitmap drawableToBitmap(Drawable drawable) {
@@ -1307,8 +1359,9 @@ public class PixivGeneratorActivity extends AppCompatActivity {
         }
     }
 
-    private void saveImageToGallery(Context context, Drawable drawable, String filename) {
+    private Drawable saveImageToGallery(Context context, Drawable drawable, String filename) {
         System.out.println("开始保存");
+        Drawable saved_drawable = null;
         try {
             Bitmap bitmap = null;
             if (drawable instanceof BitmapDrawable) {
@@ -1336,6 +1389,13 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                         if (fos != null) {
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                             fos.close();
+
+                            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+                            // 从InputStream获取Bitmap
+                            Bitmap saved_bitmap = BitmapFactory.decodeStream(inputStream);
+                            // 把Bitmap转换为Drawable
+                            saved_drawable = new BitmapDrawable(context.getResources(), saved_bitmap);
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1357,6 +1417,10 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                         fos.close();
                         MediaScannerConnection.scanFile(context, new String[]{imageFile.getPath()}, null, null);
+
+                        Bitmap saved_bitmap = BitmapFactory.decodeFile(imageFile.getPath());
+                        saved_drawable = new BitmapDrawable(getResources(), saved_bitmap);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1389,6 +1453,8 @@ public class PixivGeneratorActivity extends AppCompatActivity {
             });
 
         }
+
+        return saved_drawable;
 
     }
 }
