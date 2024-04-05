@@ -1,6 +1,8 @@
 
 # 🎉Wallpaper-generator-for-Android
  在您的安卓设备上帮助你快速生成一张手机动漫壁纸并保存👍
+
+快速了解我们：[观看 壁纸生成器 宣传片](https://www.bilibili.com/video/BV1yF411k7Rm/?spm_id_from=333.999.0.0)
  
  *本系列产品包含 [Windows 版](https://github.com/SRInternet/Wallpaper-generator/) 和 [独立分支](https://github.com/SRInternet/Pixiv-generator/)。
 
