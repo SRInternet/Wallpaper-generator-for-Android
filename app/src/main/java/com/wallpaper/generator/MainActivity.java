@@ -1534,12 +1534,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void compareVersions(String latestVersion, String Text, String html_url, String browserDownloadUrl) {
         String currentVersion = Version;  // 替换成你实际的版本获取方式
-        String pureVersionName = currentVersion.replaceAll("[^\\d.]+", "");
-        currentVersion = pureVersionName;
+        currentVersion = currentVersion.replaceAll("[^\\d.]+", "");
         System.out.println(currentVersion);
 
-        String purelatestVersion = latestVersion.replaceAll("[^\\d.]+", "");
-        latestVersion = purelatestVersion;
+        latestVersion = latestVersion.replaceAll("[^\\d.]+", "");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         LayoutInflater inflater = getLayoutInflater();

@@ -196,7 +196,7 @@
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
                         android:alpha="0.85"
-                        android:background="@android:color/transparent"
+                        android:background="@drawable/rounded_corner_transparent"
                         android:contentDescription="生成的图片"
                         android:onClick="showConfirmDialog" />
                 </androidx.cardview.widget.CardView>
@@ -225,6 +225,7 @@
                     android:id="@+id/imageView9"
                     android:layout_width="match_parent"
                     android:layout_height="158dp"
+                    android:background="@drawable/rounded_corner_bg"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -235,15 +236,15 @@
 
                 <TextView
                     android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="52dp"
                     android:shadowColor="#80000000"
                     android:shadowDx="5"
                     android:shadowDy="5"
                     android:shadowRadius="5"
                     android:text="五周年福利大放送"
+                    android:textAlignment="center"
                     android:textColor="@color/teal_200"
                     android:textSize="32sp"
                     android:textStyle="bold"
