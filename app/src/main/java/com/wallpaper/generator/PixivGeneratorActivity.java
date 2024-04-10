@@ -92,6 +92,8 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
     private List<String> informations = new ArrayList<>();
 
+    private List<File> FileUris = new ArrayList<>();
+
     private int ImagePosition;
 
     private String NoResibonse  = "思锐工作室 对于《壁纸生成器》系列产品的用户须知和免责声明（以下简称《声明》），请所有用户在使用本产品前务必认真仔细阅读。使用本产品即代表您同意本《声明》。" +
@@ -364,10 +366,10 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                         int next = position - 1;
                         if (!(next < 0)) {
                             ImagePosition = next;
-                            imageView.setImageDrawable(drawables.get(next));
-//                            Glide.with(PixivGeneratorActivity.this)
-//                                    .load(drawables.get(next))
-//                                    .into(imageView);
+//                            imageView.setImageDrawable(drawables.get(next));
+                            Glide.with(PixivGeneratorActivity.this)
+                                    .load(drawables.get(next))
+                                    .into(imageView);
                             button.setText("第 " + String.valueOf(next + 1) + "/" + drawables.toArray().length + " 张");
                             imageView.invalidate();
                         } else {
@@ -453,10 +455,10 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                         System.out.println(drawables.toArray().length);
                         if (!(next >= Integer.valueOf(drawables.toArray().length))) {
                             ImagePosition = next;
-                            imageView.setImageDrawable(drawables.get(next));
-//                            Glide.with(PixivGeneratorActivity.this)
-//                                    .load(drawables.get(next))
-//                                    .into(imageView);
+//                            imageView.setImageDrawable(drawables.get(next));
+                            Glide.with(PixivGeneratorActivity.this)
+                                    .load(drawables.get(next))
+                                    .into(imageView);
                             button.setText("第 " + String.valueOf(next + 1) + "/" + drawables.toArray().length + " 张");
                             imageView.invalidate();
                         } else {
@@ -807,6 +809,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
                             drawables.clear();
                             informations.clear();
+                            FileUris.clear();
                             TextView ProgressText = findViewById(R.id.ProgressText);
                             List<String> originalUrls = new ArrayList<>();
                             Integer loss = dataArray.length();
@@ -861,12 +864,12 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                                         // 将输入流转换为 Drawable
                                         System.out.println("载入133");
                                         drawable_image = Drawable.createFromStream(inputStream, "image_name");
-                                        Drawable returned = saveImageToGallery(PixivGeneratorActivity.this, drawable_image, Title + "." + Ext);
-                                        drawables.add(returned);
-                                        if (returned == null) {
+                                        drawables.add(drawable_image);
+                                        if (drawable_image == null) {
                                             loss -= 1;
                                         }
                                         informations.add(information);
+                                        FileUris.add(saveImageToGallery(PixivGeneratorActivity.this, drawable_image, Title + "." + Ext));
                                         // 将获取的 Drawable 对象应用到你的视图或者其他逻辑中
                                         System.out.println("载入14111");
 
@@ -908,10 +911,10 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                                     if (!(drawables.isEmpty())) {
                                         download_button2.setText("第 1/" + String.valueOf(drawables.toArray().length) + " 张");
                                         ImagePosition = 0;
-                                        yourImageView.setImageDrawable(drawables.get(0));
-//                                        Glide.with(PixivGeneratorActivity.this)
-//                                                .load(drawables.get(0))
-//                                                .into(yourImageView);
+//                                        yourImageView.setImageDrawable(drawables.get(0));
+                                        Glide.with(PixivGeneratorActivity.this)
+                                                .load(drawables.get(0))
+                                                .into(yourImageView);
                                         yourImageView.invalidate();
                                     }
 
@@ -1107,7 +1110,8 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                         try {
                             Intent shareIntent = new Intent(Intent.ACTION_SEND);
                             shareIntent.setType("image/*");
-                            Uri imageUri = FileProvider.getUriForFile(PixivGeneratorActivity.this, getString(R.string.ProviderS), saveBitmapToFile(drawableToBitmap(NormalImage.getDrawable())));
+                            // saveBitmapToFile(drawableToBitmap(NormalImage.getDrawable()))
+                            Uri imageUri = FileProvider.getUriForFile(PixivGeneratorActivity.this, getString(R.string.ProviderS), FileUris.get(ImagePosition));
                             shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
                             startActivity(Intent.createChooser(shareIntent, "分享 Pixiv 图片"));
                         } catch (Exception e) {
@@ -1359,9 +1363,10 @@ public class PixivGeneratorActivity extends AppCompatActivity {
         }
     }
 
-    private Drawable saveImageToGallery(Context context, Drawable drawable, String filename) {
+    private File saveImageToGallery(Context context, Drawable drawable, String filename) {
         System.out.println("开始保存");
         Drawable saved_drawable = null;
+        File saved_file = null;
         try {
             Bitmap bitmap = null;
             if (drawable instanceof BitmapDrawable) {
@@ -1396,6 +1401,8 @@ public class PixivGeneratorActivity extends AppCompatActivity {
                             // 把Bitmap转换为Drawable
                             saved_drawable = new BitmapDrawable(context.getResources(), saved_bitmap);
 
+                            saved_file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString(),displayName);
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1420,6 +1427,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
                         Bitmap saved_bitmap = BitmapFactory.decodeFile(imageFile.getPath());
                         saved_drawable = new BitmapDrawable(getResources(), saved_bitmap);
+                        saved_file = imageFile;
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1454,7 +1462,7 @@ public class PixivGeneratorActivity extends AppCompatActivity {
 
         }
 
-        return saved_drawable;
+        return saved_file;
 
     }
 }

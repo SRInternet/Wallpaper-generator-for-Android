@@ -1,6 +1,7 @@
 package com.wallpaper.signin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.android.application.R;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -1027,6 +1029,41 @@ public class SignInActivity extends AppCompatActivity {
                     String htmlUrl = "https://cloudreve.srinternet.top/s/lws0";  // 要打开的HTML的URL
                     openHTMLInBrowser(htmlUrl);
                 } else {
+//                    Drawable drawable = imageView.getDrawable();
+//                    Drawable imageViewDrawable = imageView.getDrawable();
+//                    Drawable embeddedDrawable = null;
+//
+//                    Field[] drawableFields = R.drawable.class.getFields();
+//                    for (Field field : drawableFields) {
+//                        try {
+//                            int drawableResId = field.getInt(null);
+//                            // 在这里可以对获取到的 drawable 资源进行处理
+//                            // 比如打印资源名称或执行其他操作
+//                            String drawableName = getResources().getResourceName(drawableResId);
+//                            Drawable resourceDrawable = getDrawable(drawableResId);
+//
+//                            // 比较 ImageView 中的 Drawable 和资源中的 Drawable
+//                            if (imageViewDrawable.equals(resourceDrawable)) {
+//                                embeddedDrawable = resourceDrawable;
+//                                break;
+//                            }
+//                            // System.out.println(drawableName);
+//                        } catch (IllegalAccessException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//
+//                    Bitmap bitmap = ((BitmapDrawable) embeddedDrawable).getBitmap();
+//
+//                    savedImageURL = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, title, description);
+//
+//                    if (savedImageURL != null) {
+//                        Toast.makeText(getApplicationContext(), "保存成功！", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "保存失败！请检查权限", Toast.LENGTH_SHORT).show();
+//                    }
+
                     Drawable drawable = imageView.getDrawable();
                     Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 
@@ -1037,6 +1074,7 @@ public class SignInActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "保存失败！请检查权限", Toast.LENGTH_SHORT).show();
                     }
+
 
                 }
 
