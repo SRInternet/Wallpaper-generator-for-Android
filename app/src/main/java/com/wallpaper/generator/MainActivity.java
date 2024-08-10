@@ -66,6 +66,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import com.android.application.R;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     private String url = "https://api.iw233.cn/api.php?sort=mp&type=json&num=1";
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private final String Version = "3.1.0";
-
+    int PICK_IMAGE_REQUEST_CODE;
 
 
 
@@ -504,6 +505,41 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "保存失败！请检查权限", Toast.LENGTH_SHORT).show();
                     }
 
+//                    Drawable drawable = imageView.getDrawable();
+//                    Drawable imageViewDrawable = imageView.getDrawable();
+//                    Drawable embeddedDrawable = null;
+//
+//                    Field[] drawableFields = R.drawable.class.getFields();
+//                    for (Field field : drawableFields) {
+//                        try {
+//                            int drawableResId = field.getInt(null);
+//                            // 在这里可以对获取到的 drawable 资源进行处理
+//                            // 比如打印资源名称或执行其他操作
+//                            String drawableName = getResources().getResourceName(drawableResId);
+//                            Drawable resourceDrawable = getDrawable(drawableResId);
+//
+//                            // 比较 ImageView 中的 Drawable 和资源中的 Drawable
+//                            if (imageViewDrawable.equals(resourceDrawable)) {
+//                                embeddedDrawable = resourceDrawable;
+//                                break;
+//                            }
+//                            // System.out.println(drawableName);
+//                        } catch (IllegalAccessException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//
+//                    Bitmap bitmap = ((BitmapDrawable) embeddedDrawable).getBitmap();
+//
+//                    savedImageURL = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, reward_name, reward_name);
+//
+//                    if (savedImageURL != null) {
+//                        Toast.makeText(getApplicationContext(), "保存成功！", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "保存失败！请检查权限", Toast.LENGTH_SHORT).show();
+//                    }
+
                 }
 
             }
@@ -616,15 +652,26 @@ public class MainActivity extends AppCompatActivity {
                     new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
                     PERMISSION_REQUEST_CODE);
         }
-        builder.setTitle("关于本程序")
-                .setMessage("程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：" + Version + "\n内部版本：3.1 The Special 5 anniversary \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：MirlKoi-API Lolicon-API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android\n\n感谢您的使用！")
+        builder.setTitle("更多设置和功能")
+                .setMessage("关于本程序\n程序名称：壁纸生成器手机版\n内部名称：Wallpaper_Generator_for_Android\n版本：" + Version + "\n内部版本：3.1 The Special 5 anniversary \n制作：SR思锐（思锐工作室）\n发布：SR思锐（思锐工作室）\n依赖：MirlKoi-API Lolicon-API\n开源与更新：https://github.com/SRInternet/Wallpaper-generator-for-Android\n\n感谢您的使用！")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 点击确定按钮后的操作
+                        dialog.dismiss();
                     }
                 })
-                .setCancelable(false); // 不可取消对话框
+                .setNegativeButton("指定更改壁纸", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // 用户点击取消按钮的逻辑处理
+                        Intent pickIntent = new Intent(Intent.ACTION_PICK);
+                        pickIntent.setType("image/*");
+                        PICK_IMAGE_REQUEST_CODE = 1;
+                        startActivityForResult(pickIntent, PICK_IMAGE_REQUEST_CODE);
+
+                    }
+                })
+                .setCancelable(true); // 不可取消对话框
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -721,7 +768,7 @@ public class MainActivity extends AppCompatActivity {
                             }).start();*/
 
 
-                            boolean completed = setWallpaperFromImageView();
+                            boolean completed = setWallpaperFromImageView(null);
 
                             SharedPreferences sharedPreferences1 = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
                             String big_voyage = sharedPreferences1.getString("big_voyage", "0");
@@ -762,10 +809,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean setWallpaperFromImageView() {
+    private boolean setWallpaperFromImageView(Drawable input) {
         ImageView image_view = findViewById(R.id.image_view);
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
-        Drawable drawable = image_view.getDrawable();
+        Drawable drawable;
+        if (input == null) {
+            drawable = image_view.getDrawable();
+        } else {
+            drawable = input;
+        };
 
 // 检查是否有正在显示的图片
         if (drawable == null) {
@@ -1321,6 +1373,60 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "图片成功地保存在了相册中.", Toast.LENGTH_SHORT).show();
     }
 
+    private Drawable loadImageFromUri(Uri imageUri) {
+        try {
+            // 从 Uri 获取输入流
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            // 将输入流解码为 Bitmap
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            // 将 Bitmap 转换为 Drawable
+            return new BitmapDrawable(getResources(), bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
+            // 获取选中的图片的 Uri
+            Uri imageUri = data.getData();
+            // 将 Uri 转换为 Drawable
+            Drawable selectedImageDrawable = loadImageFromUri(imageUri);
+            // 在这里使用返回的 Drawable 进行后续操作
+            // ...
+
+            boolean completed = setWallpaperFromImageView(selectedImageDrawable);
+
+            SharedPreferences sharedPreferences1 = getSharedPreferences("Lasted_Date", Context.MODE_PRIVATE);
+            String big_voyage = sharedPreferences1.getString("big_voyage", "0");
+
+            int process = Integer.parseInt(big_voyage);
+            int now_process = process + 1;
+
+            SharedPreferences.Editor editor = sharedPreferences1.edit();
+            editor.putString("big_voyage", Integer.toString(now_process));
+            editor.apply();
+
+            if (completed) {
+                Toast.makeText(MainActivity.this, "成功 设置壁纸", Toast.LENGTH_SHORT).show();
+
+                if (now_process >= 5) {
+                    if (!IsRewardShowed("【大航海！】勋章")) {
+                        reward_show("【大航海！】勋章", Boolean.TRUE, R.drawable.bigvoyage);
+                        RewardShowed("【大航海！】勋章");
+                    };
+                }
+
+            } else {
+                Toast.makeText(MainActivity.this, "无法 设置壁纸", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
     @Override
     public void onBackPressed() {
         // 按下返回键时的时间戳
@@ -1472,7 +1578,8 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                             })
-                            .setCancelable(false); // 不可取消对话框
+
+                            .setCancelable(true); // 不可取消对话框
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
@@ -1600,8 +1707,14 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             // 已是最新版本
-            DialogTitle.setText("无更新版本");
-            DialogMessage.setText("本版本更新信息：\n" + Text);
+            if (Objects.equals(Text, "")) {
+                DialogTitle.setText("有新版本准备中➪");
+                DialogMessage.setText("有一个更新正在排队等待发布。请稍作等待，新的更新或将在几天之内正式发布。\n若要在此时获取新的更新，您可以加入我们的开发者联系或加入交流群参与内测哦\nヾ(≧∪≦*)ノ〃");
+            } else {
+                DialogTitle.setText("无更新版本");
+                DialogMessage.setText("本版本更新信息：\n" + Text);
+            }
+
             button3.setTextColor(Color.parseColor("#808080"));
             button2.setText("确定");
 

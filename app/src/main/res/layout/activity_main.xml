@@ -424,7 +424,7 @@
                             android:drawableStart="@mipmap/ic_about"
                             android:gravity="start|center_vertical"
                             android:scaleType="centerCrop"
-                            android:text="  关于本程序"
+                            android:text="  设置"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_editor_absoluteX="0dp"

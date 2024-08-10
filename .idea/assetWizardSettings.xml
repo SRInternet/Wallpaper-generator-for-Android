@@ -143,8 +143,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="0082fc" />
-                                                <entry key="imagePath" value="C:\Users\16936\AppData\Local\Temp\baseline_photo_filter_24.xml" />
+                                                <entry key="color" value="000000" />
+                                                <entry key="imagePath" value="C:\Users\16936\AppData\Local\Temp\baseline_settings_suggest_24.xml" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -156,7 +156,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/photo_filter/baseline_photo_filter_24.xml" />
+                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/settings_suggest/baseline_settings_suggest_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -203,10 +203,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
                                       <entry key="imageAsset" value="C:\Users\16936\Downloads\900px-Pixiv_Icon.svg.png" />
-                                      <entry key="outputName" value="ic_pixiv" />
+                                      <entry key="outputName" value="ic_about" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -34,14 +34,14 @@
             android:name="com.wallpaper.signin.SignInActivity"
             android:exported="false"
             android:label="五周年福利大放送"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:theme="@style/Theme.Sign_Activity" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/Sign_in" /> -->
         <activity
             android:name="com.wallpaper.generator.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="unspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
