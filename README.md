@@ -1,5 +1,10 @@
 
 # 🎉Wallpaper-generator-for-Android
+> [!Important]
+>
+> **本存储库已停止更新**，所有内容均已迁移到[新存储库](https://github.com/SRInternet-Studio/Wallpaper_Generator_PE/)中。请跳转到[新存储库](https://github.com/SRInternet-Studio/Wallpaper_Generator_PE/)以查看更新版本。
+---
+
  在您的安卓设备上帮助你快速生成一张手机动漫壁纸并保存👍
 
 快速了解我们：[观看 壁纸生成器 宣传片](https://www.bilibili.com/video/BV1yF411k7Rm/?spm_id_from=333.999.0.0)
