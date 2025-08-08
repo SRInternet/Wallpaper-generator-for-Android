@@ -2,7 +2,7 @@
 # 🎉Wallpaper-generator-for-Android
 > [!Important]
 >
-> **本存储库已停止更新**，所有内容均已迁移到[新存储库](https://github.com/SRInternet-Studio/Wallpaper_Generator_PE/)中。请跳转到[新存储库](https://github.com/SRInternet-Studio/Wallpaper_Generator_PE/)以查看更新版本。
+> **本存储库已停止更新**，所有内容均已迁移到[新存储库](https://github.com/SRInternet-Studio/Wallpaper-generator-Mobile/)中。请跳转到[新存储库](https://github.com/SRInternet-Studio/Wallpaper-generator-Mobile/)以查看更新版本。
 ---
 
  在您的安卓设备上帮助你快速生成一张手机动漫壁纸并保存👍
